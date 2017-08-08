@@ -4,6 +4,6 @@ before_install:
   - go get honnef.co/go/tools/cmd/megacheck
 script:
   - $GOPATH/bin/goveralls -service=travis-ci
-  - $GOPATH/bin/megacheck github.com/bradleyjkemp/cupaloy
+  - $GOPATH/bin/megacheck github.com/bradleyjkemp/cupaloy/...
 notifications:
   email: false
