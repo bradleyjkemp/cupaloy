@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	subDirName        = "snapshots"
+	subDirName        = ".snapshots"
 	snapshotExtension = ""
 )
 

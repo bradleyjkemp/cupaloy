@@ -9,6 +9,7 @@ var spewConfig = spew.ConfigState{
 	Indent:                  "  ",
 	SortKeys:                true, // maps should be spewed in a deterministic order
 	DisablePointerAddresses: true, // don't spew the addresses of pointers
+	DisableCapacities:       true, // don't spew capacities of collections
 	SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
 }
 
