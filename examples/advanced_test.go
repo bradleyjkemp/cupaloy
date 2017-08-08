@@ -1,15 +1,15 @@
-package advanced
+package examples_test
 
 import (
 	"github.com/bradleyjkemp/cupaloy"
 	"testing"
 )
 
-func TestSubfolder(t *testing.T) {
-	result := "Hello world"
+func TestString(t *testing.T) {
+	result := "Hello advanced world!"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Error("Snapshots are stored relative to the test they are taken in")
+		t.Error("Tests in different packages are independent of each other")
 	}
 }
 
