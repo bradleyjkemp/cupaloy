@@ -13,6 +13,23 @@ func TestString(t *testing.T) {
 	}
 }
 
+func TestConfig(t *testing.T) {
+	snapshotter := cupaloy.DefaultConfig()
+	snapshotter.ShouldUpdate = func() bool {
+		return false
+	}
+
+	err := snapshotter.Snapshot("Hello Universe")
+	if err != nil {
+		t.Error("You can use a custom config struct to customise the behaviour of cupaloy")
+	}
+
+	err = snapshotter.SnapshotMulti("withExclamation", "Hello Universe!")
+	if err != nil {
+		t.Error("The config struct has all the same methods as the default")
+	}
+}
+
 func TestMap(t *testing.T) {
 	result := map[int]string{
 		1: "Hello",
