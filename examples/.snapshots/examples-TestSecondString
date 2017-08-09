@@ -1,7 +1,1 @@
-([]interface {}) (len=1) {
-  ([]interface {}) (len=1) {
-    ([]interface {}) (len=1) {
-      (string) (len=15) "Hello Universe!"
-    }
-  }
-}
+(string) (len=15) "Hello Universe!"
