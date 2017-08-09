@@ -1,7 +1,1 @@
-([]interface {}) (len=1) {
-  ([]interface {}) (len=1) {
-    ([]interface {}) (len=1) {
-      (string) (len=5) "World"
-    }
-  }
-}
+(string) (len=5) "World"
