@@ -24,7 +24,7 @@ func TestConfig(t *testing.T) {
 		t.Error("You can use a custom config struct to customise the behaviour of cupaloy")
 	}
 
-	err = snapshotter.SnapshotMulti("withExclamation", "Hello Universe!")
+	err = snapshotter.SnapshotMulti("withExclamation", "Hello", "Universe!")
 	if err != nil {
 		t.Error("The config struct has all the same methods as the default")
 	}

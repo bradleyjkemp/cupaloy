@@ -28,7 +28,7 @@ func TestSecondString(t *testing.T) {
 }
 
 // Multiple snapshots can be taken in a single test
-func TestMultipleStrings(t *testing.T) {
+func TestMultipleSnapshots(t *testing.T) {
 	result1 := "Hello"
 	err := cupaloy.Snapshot(result1)
 	if err != nil {
@@ -39,5 +39,16 @@ func TestMultipleStrings(t *testing.T) {
 	err = cupaloy.SnapshotMulti("result2", result2)
 	if err != nil {
 		t.Error("This will pass also as we've specified a unique (to this function) id")
+	}
+}
+
+// Snapshot() takes an arbitrary number of values
+func TestMultipleValues(t *testing.T) {
+	result1 := "Hello"
+	result2 := "World"
+
+	err := cupaloy.Snapshot(result1, result2)
+	if err != nil {
+		t.Error("You can snapshot multiple values in the same call to Snapshot")
 	}
 }
