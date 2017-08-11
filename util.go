@@ -56,7 +56,7 @@ func (c *config) readSnapshot(snapshotName string) (string, error) {
 	return string(buf), nil
 }
 
-func (c *config) writeSnapshot(snapshotName string, snapshot string) error {
+func (c *config) updateSnapshot(snapshotName string, snapshot string) error {
 	// check that subdirectory exists before writing snapshot
 	err := os.MkdirAll(c.subDirName, os.ModePerm)
 	if err != nil {
@@ -64,7 +64,12 @@ func (c *config) writeSnapshot(snapshotName string, snapshot string) error {
 	}
 
 	snapshotFile := c.snapshotFilePath(snapshotName)
-	return ioutil.WriteFile(snapshotFile, []byte(snapshot), os.FileMode(0644))
+	err = ioutil.WriteFile(snapshotFile, []byte(snapshot), os.FileMode(0644))
+	if err != nil {
+		return err
+	}
+
+	return fmt.Errorf("snapshot updated for test %s", snapshotName)
 }
 
 func diffSnapshots(previous, current string) string {

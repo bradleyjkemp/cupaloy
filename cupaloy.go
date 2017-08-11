@@ -51,12 +51,7 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 	snapshot := takeSnapshot(i...)
 
 	if c.shouldUpdate() {
-		err := c.writeSnapshot(snapshotName, snapshot)
-		if err != nil {
-			return err
-		}
-
-		return fmt.Errorf("snapshot updated for test %s", snapshotName)
+		return c.updateSnapshot(snapshotName, snapshot)
 	}
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)
