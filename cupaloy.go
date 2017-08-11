@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Snapshotter is the API for taking snapshots of values in your tests.
 type Snapshotter interface {
 	// Snapshot compares the given value to the it's previous value stored on the filesystem.
 	// An error containing a diff is returned if the snapshots do not match.
@@ -12,7 +13,7 @@ type Snapshotter interface {
 
 	// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
 	// This is done by providing a unique snapshotId for each invocation.
-	SnapshotMulti(snapshotId string, i ...interface{}) error
+	SnapshotMulti(snapshotID string, i ...interface{}) error
 }
 
 // New constructs a new, configured instance of cupaloy using the given Configurators.
@@ -32,8 +33,8 @@ func Snapshot(i ...interface{}) error {
 }
 
 // SnapshotMulti calls Snapshotter.SnapshotMulti with the default config.
-func SnapshotMulti(snapshotId string, i ...interface{}) error {
-	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotId)
+func SnapshotMulti(snapshotID string, i ...interface{}) error {
+	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotID)
 	return defaultConfig().snapshot(snapshotName, i...)
 }
 
@@ -41,8 +42,8 @@ func (c *config) Snapshot(i ...interface{}) error {
 	return c.snapshot(getNameOfCaller(), i...)
 }
 
-func (c *config) SnapshotMulti(snapshotId string, i ...interface{}) error {
-	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotId)
+func (c *config) SnapshotMulti(snapshotID string, i ...interface{}) error {
+	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotID)
 	return c.snapshot(snapshotName, i...)
 }
 
@@ -65,7 +66,7 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 
 	if snapshot != prevSnapshot {
 		diff := diffSnapshots(prevSnapshot, snapshot)
-		return fmt.Errorf("snapshot not equal:\n%s\n", diff)
+		return fmt.Errorf("snapshot not equal:\n%s", diff)
 	}
 
 	return nil

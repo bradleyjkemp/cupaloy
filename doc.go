@@ -1,4 +1,4 @@
-// Simple golang snapshot testing: test that your changes don't unexpectedly alter the results of your code.
+// Package cupaloy provides a simple api for snapshot testing in golang: test that your changes don't unexpectedly alter the results of your code.
 //
 // cupaloy takes a snapshot of a given value and compares it to a snapshot committed alongside your tests. If the values don't match then you'll be forced to update the snapshot file before the test passes.
 //
