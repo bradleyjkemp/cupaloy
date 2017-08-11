@@ -1,9 +1,10 @@
 language: go
 before_install:
   - go get github.com/mattn/goveralls
-  - go get honnef.co/go/tools/cmd/megacheck
+  - go get github.com/alecthomas/gometalinter
+  - gometalinter --install
 script:
   - $GOPATH/bin/goveralls -v -service=travis-ci
-  - $GOPATH/bin/megacheck github.com/bradleyjkemp/cupaloy/...
+  - $GOPATH/bin/gometalinter github.com/bradleyjkemp/cupaloy/...
 notifications:
   email: false
