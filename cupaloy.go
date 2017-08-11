@@ -4,55 +4,58 @@ import (
 	"fmt"
 )
 
-// Config can be used to run cupaloy with customised behaviour e.g. changing how it decides to update snapshots
-type Config struct {
-	// ShouldUpdate allows you to control the decision of whether to update snapshots
-	// The default behaviour is to check if the UPDATE_SNASPHOTS environment variable is set
-	ShouldUpdate      func() bool
-	subDirName        string
-	snapshotExtension string
+type Snapshotter interface {
+	// Snapshot compares the given value to the it's previous value stored on the filesystem.
+	// An error containing a diff is returned if the snapshots do not match.
+	// Snapshot determines the snapshot file automatically from the name of the calling function.
+	Snapshot(i ...interface{}) error
+
+	// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
+	// This is done by providing a unique snapshotId for each invocation.
+	SnapshotMulti(snapshotId string, i ...interface{}) error
 }
 
-// DefaultConfig returns the default configuration for cupaloy.
-// This should be used as the basis for custom configurations
-func DefaultConfig() *Config {
-	return &Config{
-		ShouldUpdate:      shouldUpdate,
-		subDirName:        ".snapshots",
-		snapshotExtension: "",
+// New constructs a new, configured instance of cupaloy using the given Configurators.
+func New(configurators ...Configurator) Snapshotter {
+	config := defaultConfig()
+
+	for _, configurator := range configurators {
+		configurator(config)
 	}
+
+	return config
 }
 
-// Snapshot calls http://godoc.org/github.com/bradleyjkemp/cupaloy#Config.Snapshot with the default config
+// Snapshot calls Snapshotter.Snapshot with the default config.
 func Snapshot(i ...interface{}) error {
-	return DefaultConfig().snapshot(getNameOfCaller(), i...)
+	return defaultConfig().snapshot(getNameOfCaller(), i...)
 }
 
-// SnapshotMulti calls http://godoc.org/github.com/bradleyjkemp/cupaloy#Config.SnapshotMulti with the default config
+// SnapshotMulti calls Snapshotter.SnapshotMulti with the default config.
 func SnapshotMulti(snapshotId string, i ...interface{}) error {
 	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotId)
-	return DefaultConfig().snapshot(snapshotName, i...)
+	return defaultConfig().snapshot(snapshotName, i...)
 }
 
-// Snapshot compares the given value to the it's previous value stored on the filesystem.
-// An error containing a diff is returned if the snapshots do not match.
-// Snapshot determines the snapshot file automatically from the name of the calling function.
-func (c *Config) Snapshot(i ...interface{}) error {
+func (c *config) Snapshot(i ...interface{}) error {
 	return c.snapshot(getNameOfCaller(), i...)
 }
 
-// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
-// This is done by providing a unique snapshotId for each invocation.
-func (c *Config) SnapshotMulti(snapshotId string, i ...interface{}) error {
+func (c *config) SnapshotMulti(snapshotId string, i ...interface{}) error {
 	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotId)
 	return c.snapshot(snapshotName, i...)
 }
 
-func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
+func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 	snapshot := takeSnapshot(i...)
 
-	if c.ShouldUpdate() {
-		return c.writeSnapshot(snapshotName, snapshot)
+	if c.shouldUpdate() {
+		err := c.writeSnapshot(snapshotName, snapshot)
+		if err != nil {
+			return err
+		}
+
+		return fmt.Errorf("snapshot updated for test %s", snapshotName)
 	}
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)

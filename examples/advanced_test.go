@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// Snapshots are isolated by package so test functions with the same name are fine
 func TestString(t *testing.T) {
 	result := "Hello advanced world!"
 	err := cupaloy.Snapshot(result)
@@ -13,23 +14,22 @@ func TestString(t *testing.T) {
 	}
 }
 
+// A configured instance of cupaloy has the same interface as the static methods
 func TestConfig(t *testing.T) {
-	snapshotter := cupaloy.DefaultConfig()
-	snapshotter.ShouldUpdate = func() bool {
-		return false
-	}
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("UPDATE"))
 
 	err := snapshotter.Snapshot("Hello Universe")
 	if err != nil {
-		t.Error("You can use a custom config struct to customise the behaviour of cupaloy")
+		t.Errorf("You can use a custom config struct to customise the behaviour of cupaloy %s", err)
 	}
 
 	err = snapshotter.SnapshotMulti("withExclamation", "Hello", "Universe!")
 	if err != nil {
-		t.Error("The config struct has all the same methods as the default")
+		t.Errorf("The config struct has all the same methods as the default %s", err)
 	}
 }
 
+// All types can be snapshotted. Maps are snapshotted in a deterministic way
 func TestMap(t *testing.T) {
 	result := map[int]string{
 		1: "Hello",
@@ -39,6 +39,6 @@ func TestMap(t *testing.T) {
 
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Error("Snapshots can be taken of any type")
+		t.Errorf("Snapshots can be taken of any type %s", err)
 	}
 }

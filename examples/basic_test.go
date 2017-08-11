@@ -9,12 +9,12 @@ func TestString(t *testing.T) {
 	result := "Hello world"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Error("This will pass because \"Hello world\" is in the snapshot")
+		t.Errorf("This will pass because \"Hello world\" is in the snapshot %s", err)
 	}
 
 	err = cupaloy.Snapshot("Hello world!")
 	if err == nil {
-		t.Error("Now it will fail because the snapshot doesn't have an exclamation mark")
+		t.Errorf("Now it will fail because the snapshot doesn't have an exclamation mark %s", err)
 	}
 }
 
@@ -23,7 +23,7 @@ func TestSecondString(t *testing.T) {
 	result := "Hello Universe!"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Error("This will pass because Snapshots are per test function")
+		t.Errorf("This will pass because Snapshots are per test function %s", err)
 	}
 }
 
@@ -32,13 +32,13 @@ func TestMultipleSnapshots(t *testing.T) {
 	result1 := "Hello"
 	err := cupaloy.Snapshot(result1)
 	if err != nil {
-		t.Error("This will pass as normal")
+		t.Errorf("This will pass as normal %s", err)
 	}
 
 	result2 := "World"
 	err = cupaloy.SnapshotMulti("result2", result2)
 	if err != nil {
-		t.Error("This will pass also as we've specified a unique (to this function) id")
+		t.Errorf("This will pass also as we've specified a unique (to this function) id %s", err)
 	}
 }
 
@@ -49,6 +49,6 @@ func TestMultipleValues(t *testing.T) {
 
 	err := cupaloy.Snapshot(result1, result2)
 	if err != nil {
-		t.Error("You can snapshot multiple values in the same call to Snapshot")
+		t.Errorf("You can snapshot multiple values in the same call to Snapshot %s", err)
 	}
 }

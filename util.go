@@ -28,12 +28,12 @@ func getNameOfCaller() string {
 	return strings.Replace(packageFunctionName, ".", "-", -1)
 }
 
-func shouldUpdate() bool {
-	_, varSet := os.LookupEnv("UPDATE_SNAPSHOTS")
+func envVariableSet(envVariable string) bool {
+	_, varSet := os.LookupEnv(envVariable)
 	return varSet
 }
 
-func (c *Config) snapshotFilePath(testName string) string {
+func (c *config) snapshotFilePath(testName string) string {
 	return filepath.Join(c.subDirName, testName+c.snapshotExtension)
 }
 
@@ -41,7 +41,7 @@ func takeSnapshot(i ...interface{}) string {
 	return spewConfig.Sdump(i...)
 }
 
-func (c *Config) readSnapshot(snapshotName string) (string, error) {
+func (c *config) readSnapshot(snapshotName string) (string, error) {
 	snapshotFile := c.snapshotFilePath(snapshotName)
 	buf, err := ioutil.ReadFile(snapshotFile)
 
@@ -56,7 +56,7 @@ func (c *Config) readSnapshot(snapshotName string) (string, error) {
 	return string(buf), nil
 }
 
-func (c *Config) writeSnapshot(snapshotName string, snapshot string) error {
+func (c *config) writeSnapshot(snapshotName string, snapshot string) error {
 	// check that subdirectory exists before writing snapshot
 	err := os.MkdirAll(c.subDirName, os.ModePerm)
 	if err != nil {
