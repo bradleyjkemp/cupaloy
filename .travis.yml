@@ -3,7 +3,7 @@ before_install:
   - go get github.com/mattn/goveralls
   - go get honnef.co/go/tools/cmd/megacheck
 script:
-  - $GOPATH/bin/goveralls -service=travis-ci
+  - $GOPATH/bin/goveralls -v -service=travis-ci
   - $GOPATH/bin/megacheck github.com/bradleyjkemp/cupaloy/...
 notifications:
   email: false
