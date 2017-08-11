@@ -14,6 +14,16 @@ func EnvVariableName(name string) Configurator {
 	}
 }
 
+// SnapshotSubdirectory can be used to customize the location that snapshots are stored in.
+// e.g.
+//  cupaloy.New(SnapshotSubdirectory("testdata"))
+// Will create an instance where snapshots are stored in testdata/ rather than the default .snapshots/
+func SnapshotSubdirectory(name string) Configurator {
+	return func(c *config) {
+		c.subDirName = name
+	}
+}
+
 type config struct {
 	envVariable       string
 	subDirName        string

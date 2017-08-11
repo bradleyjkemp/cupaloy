@@ -52,3 +52,17 @@ func TestMultipleValues(t *testing.T) {
 		t.Errorf("You can snapshot multiple values in the same call to Snapshot %s", err)
 	}
 }
+
+// All types can be snapshotted. Maps are snapshotted in a deterministic way
+func TestMap(t *testing.T) {
+	result := map[int]string{
+		1: "Hello",
+		3: "!",
+		2: "World",
+	}
+
+	err := cupaloy.Snapshot(result)
+	if err != nil {
+		t.Errorf("Snapshots can be taken of any type %s", err)
+	}
+}

@@ -29,16 +29,35 @@ func TestConfig(t *testing.T) {
 	}
 }
 
-// All types can be snapshotted. Maps are snapshotted in a deterministic way
-func TestMap(t *testing.T) {
-	result := map[int]string{
-		1: "Hello",
-		3: "!",
-		2: "World",
-	}
+// If a snapshot is update then this returns an error
+// This is to prevent you accidentally updating your snapshots in CI
+func TestUpdate(t *testing.T) {
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("HOME"))
 
-	err := cupaloy.Snapshot(result)
-	if err != nil {
-		t.Errorf("Snapshots can be taken of any type %s", err)
+	err := snapshotter.Snapshot("Hello world")
+	if err == nil {
+		t.Errorf("This will always return an error %s", err)
+	}
+}
+
+// If a snapshot doesn't exist then an error is thrown
+func TestMissingSnapshot(t *testing.T) {
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("ENOEXIST"))
+
+	err := snapshotter.Snapshot("Hello world")
+	if err == nil {
+		t.Errorf("This will always return an error %s", err)
+	}
+}
+
+// If the snapshots directory doesn't exit an error is returned
+func TestMissingDirectory(t *testing.T) {
+	snapshotter := cupaloy.New(
+		cupaloy.EnvVariableName("ENOEXIST"),
+		cupaloy.SnapshotSubdirectory("noexists"))
+
+	err := snapshotter.Snapshot("Hello world")
+	if err == nil {
+		t.Errorf("This will always return an error %s", err)
 	}
 }
