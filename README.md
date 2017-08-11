@@ -29,4 +29,4 @@ To update the snapshots simply set the ```UPDATE_SNAPSHOTS``` environment variab
 ```bash
 UPDATE_SNAPSHOTS=true go test ./...
 ```
-Your snapshot files will now have been updated to reflect the current output of your code.
+This will fail all tests where the snapshot was updated (to stop you accidentally updating snapshots in CI) but your snapshot files will now have been updated to reflect the current output of your code.
