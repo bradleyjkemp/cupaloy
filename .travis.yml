@@ -1,10 +1,23 @@
 language: go
+
+go:
+  - 1.6
+  - 1.7.x
+  - 1.x
+  - master
+
+matrix:
+  allow_failures:
+    - go: master
+
 before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/alecthomas/gometalinter
   - gometalinter --install
+
 script:
   - $GOPATH/bin/goveralls -v -service=travis-ci
   - $GOPATH/bin/gometalinter ./...
+
 notifications:
   email: false
