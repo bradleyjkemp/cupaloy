@@ -30,3 +30,6 @@ To update the snapshots simply set the ```UPDATE_SNAPSHOTS``` environment variab
 UPDATE_SNAPSHOTS=true go test ./...
 ```
 This will fail all tests where the snapshot was updated (to stop you accidentally updating snapshots in CI) but your snapshot files will now have been updated to reflect the current output of your code.
+
+### Examples
+For further usage examples see basic_test.go and advanced_test.go in the examples/ directory which are both kept up to date and run on CI.
