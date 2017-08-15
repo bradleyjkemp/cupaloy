@@ -3,13 +3,14 @@ package cupaloy
 import (
 	"errors"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
-	"github.com/pmezard/go-difflib/difflib"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/davecgh/go-spew/spew"
+	"github.com/pmezard/go-difflib/difflib"
 )
 
 var spewConfig = spew.ConfigState{
@@ -46,7 +47,7 @@ func (c *config) readSnapshot(snapshotName string) (string, error) {
 	buf, err := ioutil.ReadFile(snapshotFile)
 
 	if os.IsNotExist(err) {
-		return "", fmt.Errorf("no snapshot exists for test %s", snapshotName)
+		return "", err
 	}
 
 	if err != nil {

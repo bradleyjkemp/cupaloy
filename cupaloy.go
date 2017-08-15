@@ -2,6 +2,7 @@ package cupaloy
 
 import (
 	"fmt"
+	"os"
 )
 
 // Snapshotter is the API for taking snapshots of values in your tests.
@@ -50,13 +51,18 @@ func (c *config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 	snapshot := takeSnapshot(i...)
 
-	if c.shouldUpdate() {
+	prevSnapshot, err := c.readSnapshot(snapshotName)
+	fmt.Println(prevSnapshot, err)
+	if os.IsNotExist(err) {
+		fmt.Println("Doesn't exist so creating")
 		return c.updateSnapshot(snapshotName, snapshot)
 	}
-
-	prevSnapshot, err := c.readSnapshot(snapshotName)
 	if err != nil {
 		return err
+	}
+
+	if c.shouldUpdate() {
+		return c.updateSnapshot(snapshotName, snapshot)
 	}
 
 	if snapshot != prevSnapshot {

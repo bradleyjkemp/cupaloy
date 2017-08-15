@@ -1,8 +1,11 @@
 package examples_test
 
 import (
-	"github.com/bradleyjkemp/cupaloy"
+	"fmt"
+	"io/ioutil"
 	"testing"
+
+	"github.com/bradleyjkemp/cupaloy"
 )
 
 // Snapshots are isolated by package so test functions with the same name are fine
@@ -10,7 +13,7 @@ func TestString(t *testing.T) {
 	result := "Hello advanced world!"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Error("Tests in different packages are independent of each other")
+		t.Fatal("Tests in different packages are independent of each other")
 	}
 }
 
@@ -20,12 +23,12 @@ func TestConfig(t *testing.T) {
 
 	err := snapshotter.Snapshot("Hello Universe")
 	if err != nil {
-		t.Errorf("You can use a custom config struct to customise the behaviour of cupaloy %s", err)
+		t.Fatalf("You can use a custom config struct to customise the behaviour of cupaloy %s", err)
 	}
 
 	err = snapshotter.SnapshotMulti("withExclamation", "Hello", "Universe!")
 	if err != nil {
-		t.Errorf("The config struct has all the same methods as the default %s", err)
+		t.Fatalf("The config struct has all the same methods as the default %s", err)
 	}
 }
 
@@ -36,28 +39,24 @@ func TestUpdate(t *testing.T) {
 
 	err := snapshotter.Snapshot("Hello world")
 	if err == nil {
-		t.Errorf("This will always return an error %s", err)
+		t.Fatalf("This will always return an error %s", err)
 	}
 }
 
-// If a snapshot doesn't exist then an error is thrown
+// If a snapshot doesn't exist then it is created and an error returned
 func TestMissingSnapshot(t *testing.T) {
-	snapshotter := cupaloy.New(cupaloy.EnvVariableName("ENOEXIST"))
-
-	err := snapshotter.Snapshot("Hello world")
-	if err == nil {
-		t.Errorf("This will always return an error %s", err)
+	tempdir, err := ioutil.TempDir(".", "ignored")
+	if err != nil {
+		t.Fatal(err)
 	}
-}
 
-// If the snapshots directory doesn't exit an error is returned
-func TestMissingDirectory(t *testing.T) {
 	snapshotter := cupaloy.New(
 		cupaloy.EnvVariableName("ENOEXIST"),
-		cupaloy.SnapshotSubdirectory("noexists"))
+		cupaloy.SnapshotSubdirectory(tempdir))
 
-	err := snapshotter.Snapshot("Hello world")
+	err = snapshotter.Snapshot("Hello world")
+	fmt.Println(err)
 	if err == nil {
-		t.Errorf("This will always return an error %s", err)
+		t.Fatalf("This will always return an error %s", err)
 	}
 }
