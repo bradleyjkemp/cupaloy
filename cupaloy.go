@@ -52,9 +52,7 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 	snapshot := takeSnapshot(i...)
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)
-	fmt.Println(prevSnapshot, err)
 	if os.IsNotExist(err) {
-		fmt.Println("Doesn't exist so creating")
 		return c.updateSnapshot(snapshotName, snapshot)
 	}
 	if err != nil {
