@@ -31,5 +31,37 @@ UPDATE_SNAPSHOTS=true go test ./...
 ```
 This will fail all tests where the snapshot was updated (to stop you accidentally updating snapshots in CI) but your snapshot files will now have been updated to reflect the current output of your code.
 
-### Examples
+### Further Examples
+#### Table driven tests
+```golang
+var testCases = map[string][]string{
+	"TestCaseOne": []string{......},
+	"AnotherTestCase": []string{......},
+  ....
+}
+
+func TestCases(t *testing.T) {
+	for testName, args := range testCases {
+		t.Run(testName, func(t *testing.T) {
+      result := functionUnderTest(testCase...)
+
+			err := cupaloy.SnapshotMulti(testName, result)
+			if err != nil {
+				t.Fatalf("error: %s", err)
+			}
+		})
+	}
+}
+```
+#### Changing output directory
+```golang
+func TestSubdirectory(t *testing.T) {
+  result := someFunction()
+  snapshotter := cupaloy.New(cupaloy.SnapshotSubdirectory("testdata"))
+  err := snapshotter.Snapshot(result)
+  if err != nil {
+    t.Fatalf("error: %s", err)
+  }
+}
+```
 For further usage examples see basic_test.go and advanced_test.go in the examples/ directory which are both kept up to date and run on CI.
