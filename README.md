@@ -43,7 +43,7 @@ var testCases = map[string][]string{
 func TestCases(t *testing.T) {
     for testName, args := range testCases {
         t.Run(testName, func(t *testing.T) {
-            result := functionUnderTest(testCase...)
+            result := functionUnderTest(args...)
             err := cupaloy.SnapshotMulti(testName, result)
             if err != nil {
                 t.Fatalf("error: %s", err)
