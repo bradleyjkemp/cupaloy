@@ -13,15 +13,15 @@ go get -u github.com/bradleyjkemp/cupaloy
 ### Usage
 ```golang
 func TestExample(t *testing.T) {
-  result := someFunction()
+    result := someFunction()
 
-  // check that the result is the same as the last time the snapshot was updated
-  err := cupaloy.Snapshot(result)
-  
-  // if the result has changed then an error containing a diff will be returned
-  if err != nil {
-    t.Fatalf("error: %s", err)
-  }
+    // check that the result is the same as the last time the snapshot was updated
+    err := cupaloy.Snapshot(result)
+
+    // if the result has changed then an error containing a diff will be returned
+    if err != nil {
+        t.Fatalf("error: %s", err)
+    }
 }
 ```
 
@@ -35,33 +35,32 @@ This will fail all tests where the snapshot was updated (to stop you accidentall
 #### Table driven tests
 ```golang
 var testCases = map[string][]string{
-	"TestCaseOne": []string{......},
-	"AnotherTestCase": []string{......},
-  ....
+    "TestCaseOne": []string{......},
+    "AnotherTestCase": []string{......},
+    ....
 }
 
 func TestCases(t *testing.T) {
-	for testName, args := range testCases {
-		t.Run(testName, func(t *testing.T) {
-      result := functionUnderTest(testCase...)
-
-			err := cupaloy.SnapshotMulti(testName, result)
-			if err != nil {
-				t.Fatalf("error: %s", err)
-			}
-		})
-	}
+    for testName, args := range testCases {
+        t.Run(testName, func(t *testing.T) {
+            result := functionUnderTest(testCase...)
+            err := cupaloy.SnapshotMulti(testName, result)
+            if err != nil {
+                t.Fatalf("error: %s", err)
+            }
+        })
+    }
 }
 ```
 #### Changing output directory
 ```golang
 func TestSubdirectory(t *testing.T) {
-  result := someFunction()
-  snapshotter := cupaloy.New(cupaloy.SnapshotSubdirectory("testdata"))
-  err := snapshotter.Snapshot(result)
-  if err != nil {
-    t.Fatalf("error: %s", err)
-  }
+    result := someFunction()
+    snapshotter := cupaloy.New(cupaloy.SnapshotSubdirectory("testdata"))
+    err := snapshotter.Snapshot(result)
+    if err != nil {
+        t.Fatalf("error: %s", err)
+    }
 }
 ```
 For further usage examples see basic_test.go and advanced_test.go in the examples/ directory which are both kept up to date and run on CI.
