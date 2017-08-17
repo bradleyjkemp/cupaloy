@@ -75,9 +75,9 @@ func (c *config) updateSnapshot(snapshotName string, snapshot string) error {
 
 	if isNewSnapshot {
 		return fmt.Errorf("snapshot created for test %s", snapshotName)
-	} else {
-		return fmt.Errorf("snapshot updated for test %s", snapshotName)
 	}
+
+	return fmt.Errorf("snapshot updated for test %s", snapshotName)
 }
 
 func diffSnapshots(previous, current string) string {
