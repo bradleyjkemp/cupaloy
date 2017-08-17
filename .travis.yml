@@ -11,13 +11,10 @@ matrix:
     - go: master
 
 before_install:
-  - go get github.com/mattn/goveralls
-  - go get github.com/alecthomas/gometalinter
-  - gometalinter --install
+  - make install
 
 script:
-  - $GOPATH/bin/goveralls -v -service=travis-ci
-  - $GOPATH/bin/gometalinter ./...
+  - make test-ci
 
 notifications:
   email: false
