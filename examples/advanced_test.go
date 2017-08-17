@@ -1,7 +1,6 @@
 package examples_test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -41,6 +40,9 @@ func TestUpdate(t *testing.T) {
 	if err == nil {
 		t.Fatalf("This will always return an error %s", err)
 	}
+	if err.Error() != "snapshot updated for test examples_test-TestUpdate" {
+		t.Fatalf("Error returned will say that snapshot was updated")
+	}
 }
 
 // If a snapshot doesn't exist then it is created and an error returned
@@ -55,8 +57,10 @@ func TestMissingSnapshot(t *testing.T) {
 		cupaloy.SnapshotSubdirectory(tempdir))
 
 	err = snapshotter.Snapshot("Hello world")
-	fmt.Println(err)
 	if err == nil {
 		t.Fatalf("This will always return an error %s", err)
+	}
+	if err.Error() != "snapshot created for test examples_test-TestMissingSnapshot" {
+		t.Fatalf("Error returned will say that snapshot was created %s", err)
 	}
 }

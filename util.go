@@ -65,12 +65,19 @@ func (c *config) updateSnapshot(snapshotName string, snapshot string) error {
 	}
 
 	snapshotFile := c.snapshotFilePath(snapshotName)
+	_, err = os.Stat(snapshotFile)
+	isNewSnapshot := os.IsNotExist(err)
+
 	err = ioutil.WriteFile(snapshotFile, []byte(snapshot), os.FileMode(0644))
 	if err != nil {
 		return err
 	}
 
-	return fmt.Errorf("snapshot updated for test %s", snapshotName)
+	if isNewSnapshot {
+		return fmt.Errorf("snapshot created for test %s", snapshotName)
+	} else {
+		return fmt.Errorf("snapshot updated for test %s", snapshotName)
+	}
 }
 
 func diffSnapshots(previous, current string) string {
