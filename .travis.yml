@@ -10,7 +10,7 @@ matrix:
   allow_failures:
     - go: master
 
-before_install:
+install:
   - make install
 
 script:
