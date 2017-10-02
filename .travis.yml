@@ -18,3 +18,7 @@ script:
 
 notifications:
   email: false
+
+env:
+  global:
+    - MAKEFLAGS="-j 2"
