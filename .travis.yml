@@ -7,7 +7,8 @@ go:
 
 matrix:
   allow_failures:
-    - go: master 1.8.x
+    - go: master
+    - go: 1.8.x
 
 install:
   - make install
