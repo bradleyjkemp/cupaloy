@@ -45,6 +45,7 @@ func SnapshotMulti(snapshotID string, i ...interface{}) error {
 	return defaultConfig().snapshot(snapshotName, i...)
 }
 
+// SnapshotT calls Snapshotter.SnapshotT with the default config.
 func SnapshotT(t *testing.T, i ...interface{}) {
 	t.Helper()
 	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
