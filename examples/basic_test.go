@@ -1,8 +1,9 @@
 package examples
 
 import (
-	"github.com/bradleyjkemp/cupaloy"
 	"testing"
+
+	"github.com/bradleyjkemp/cupaloy"
 )
 
 func TestString(t *testing.T) {

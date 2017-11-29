@@ -34,7 +34,7 @@ func TestConfig(t *testing.T) {
 // If a snapshot is update then this returns an error
 // This is to prevent you accidentally updating your snapshots in CI
 func TestUpdate(t *testing.T) {
-	snapshotter := cupaloy.New(cupaloy.EnvVariableName("HOME"))
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("GOPATH"))
 
 	err := snapshotter.Snapshot("Hello world")
 	if err == nil {
@@ -63,4 +63,17 @@ func TestMissingSnapshot(t *testing.T) {
 	if err.Error() != "snapshot created for test examples_test-TestMissingSnapshot" {
 		t.Fatalf("Error returned will say that snapshot was created %s", err)
 	}
+}
+
+// Multiple snapshots can be taken in a single test
+func TestMultipleSnapshots(t *testing.T) {
+	t.Run("hello", func(t *testing.T) {
+		result1 := "Hello"
+		cupaloy.SnapshotT(t, result1)
+	})
+
+	t.Run("world", func(t *testing.T) {
+		result2 := "World"
+		cupaloy.SnapshotT(t, result2)
+	})
 }
