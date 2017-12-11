@@ -1,6 +1,7 @@
 package examples_test
 
 import (
+	"bytes"
 	"io/ioutil"
 	"testing"
 
@@ -12,7 +13,30 @@ func TestString(t *testing.T) {
 	result := "Hello advanced world!"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Fatal("Tests in different packages are independent of each other")
+		t.Fatalf("Tests in different packages are independent of each other %s", err)
+	}
+}
+
+func TestRawString(t *testing.T) {
+	result := "Hello advanced world!"
+	result2 := "Goodbye"
+	err := cupaloy.New(cupaloy.RawOutput(true)).Snapshot(result, result2)
+	if err != nil {
+		t.Fatalf("Strings can be output in raw form %s", err)
+	}
+}
+
+func TestRawReader(t *testing.T) {
+	result := &bytes.Buffer{}
+	result.WriteString("Hello world")
+	result2 := map[string]bool{
+		"Hello": true,
+		"World": true,
+	}
+
+	err := cupaloy.New(cupaloy.RawOutput(true)).Snapshot(result, result2)
+	if err != nil {
+		t.Fatalf("io.Readers can be output in raw form but other types remain the same %s", err)
 	}
 }
 

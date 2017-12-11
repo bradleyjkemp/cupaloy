@@ -1,0 +1,5 @@
+Hello world
+(map[string]bool) (len=2) {
+  (string) (len=5) "Hello": (bool) true,
+  (string) (len=5) "World": (bool) true
+}

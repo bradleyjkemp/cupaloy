@@ -24,10 +24,20 @@ func SnapshotSubdirectory(name string) Configurator {
 	}
 }
 
+// RawOutput can be used to enable dumping raw output to the snapshot file
+// rather than using go-spew. This raw output is possible when snapshotting
+// strings or io.Readers
+func RawOutput(b bool) Configurator {
+	return func(c *config) {
+		c.rawOutput = b
+	}
+}
+
 type config struct {
 	envVariable       string
 	subDirName        string
 	snapshotExtension string
+	rawOutput         bool
 }
 
 func defaultConfig() *config {
@@ -35,6 +45,7 @@ func defaultConfig() *config {
 		envVariable:       "UPDATE_SNAPSHOTS",
 		subDirName:        ".snapshots",
 		snapshotExtension: "",
+		rawOutput:         false,
 	}
 }
 
