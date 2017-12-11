@@ -74,7 +74,10 @@ func (c *config) SnapshotT(t *testing.T, i ...interface{}) {
 }
 
 func (c *config) snapshot(snapshotName string, i ...interface{}) error {
-	snapshot := takeSnapshot(i...)
+	snapshot, err := c.takeSnapshot(i...)
+	if err != nil {
+		return err
+	}
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)
 	if os.IsNotExist(err) {

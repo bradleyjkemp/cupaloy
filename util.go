@@ -1,8 +1,10 @@
 package cupaloy
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -19,6 +21,7 @@ var spewConfig = spew.ConfigState{
 	DisablePointerAddresses: true, // don't spew the addresses of pointers
 	DisableCapacities:       true, // don't spew capacities of collections
 	SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
+
 }
 
 func getNameOfCaller() string {
@@ -38,8 +41,27 @@ func (c *config) snapshotFilePath(testName string) string {
 	return filepath.Join(c.subDirName, testName+c.snapshotExtension)
 }
 
-func takeSnapshot(i ...interface{}) string {
-	return spewConfig.Sdump(i...)
+func (c *config) takeSnapshot(is ...interface{}) (string, error) {
+	buf := bytes.Buffer{}
+
+	for _, i := range is {
+		str, sOk := i.(string)
+		r, rOk := i.(io.Reader)
+		if c.rawOutput && sOk {
+			buf.WriteString(str + "\n")
+		} else if c.rawOutput && rOk {
+			b, err := ioutil.ReadAll(r)
+			if err != nil {
+				return "", err
+			}
+			buf.Write(b)
+			buf.WriteString("\n")
+		} else {
+			buf.WriteString(spewConfig.Sdump(i))
+		}
+	}
+
+	return buf.String(), nil
 }
 
 func (c *config) readSnapshot(snapshotName string) (string, error) {
