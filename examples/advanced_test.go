@@ -74,6 +74,6 @@ func TestMultipleSnapshots(t *testing.T) {
 
 	t.Run("world", func(t *testing.T) {
 		result2 := "World"
-		cupaloy.SnapshotT(t, result2)
+		cupaloy.New().SnapshotT(t, result2)
 	})
 }
