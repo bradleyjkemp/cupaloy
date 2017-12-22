@@ -8,14 +8,14 @@
 //   go get -u github.com/bradleyjkemp/cupaloy
 //
 // Usage
-// func TestExample(t *testing.T) {
-//     result := someFunction()
+//  func TestExample(t *testing.T) {
+//    result := someFunction()
 // 
-//     // check that the result is the same as the last time the snapshot was updated
-//     // if the result has changed then the test will be failed with an error containing
-//     // a diff of the changes
-//     cupaloy.SnapshotT(t, result)
-// }
+//    // check that the result is the same as the last time the snapshot was updated
+//    // if the result has changed then the test will be failed with an error containing
+//    // a diff of the changes
+//    cupaloy.SnapshotT(t, result)
+//  }
 //
 // To update the snapshots simply set the UPDATE_SNAPSHOTS environment variable and run your tests e.g.
 //   UPDATE_SNAPSHOTS=true go test ./...
