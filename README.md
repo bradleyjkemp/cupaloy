@@ -1,9 +1,9 @@
 # cupaloy [![Build Status](https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master)](https://travis-ci.org/bradleyjkemp/cupaloy) [![Coverage Status](https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg)](https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy)](https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy) [![GoDoc](https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg)](https://godoc.org/github.com/bradleyjkemp/cupaloy)
-Simple golang snapshot testing: test that your changes don't unexpectedly alter the results of your code.
+Simple Go snapshot testing: test that your changes don't unexpectedly alter the results of your code.
 
 `cupaloy` takes a snapshot of a given value and compares it to a snapshot committed alongside your tests. If the values don't match then you'll be forced to update the snapshot file before the test passes.
 
-Snapshot files are handled automagically: just use the `cupaloy.Snapshot(value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file and compare it with the given value.
+Snapshot files are handled automagically: just use the `cupaloy.SnapshotT(t, value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file and compare it with the given value.
 
 ### Installation
 ```bash
