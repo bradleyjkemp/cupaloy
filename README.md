@@ -1,14 +1,15 @@
-# cupaloy [![Build Status](https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master)](https://travis-ci.org/bradleyjkemp/cupaloy) [![Coverage Status](https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg)](https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy)](https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy) [![GoDoc](https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg)](https://godoc.org/github.com/bradleyjkemp/cupaloy)
-Simple Go snapshot testing: test that your changes don't unexpectedly alter the results of your code.
+<p align="center">
+    <img src="https://storage.googleapis.com/gopherizeme.appspot.com/gophers/433f5f3464537eb10606d497ab445423566cf929.png" width="250">
+    <br>
+    <a href="https://travis-ci.org/bradleyjkemp/cupaloy"><img src="https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master" alt="Build Status" /></a>
+    <a href="https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master"><img src="https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg" alt="Coverage Status" /></a>
+    <a href="https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy"><img src="https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy" alt="Go Report Card" /></a>
+    <a href="https://godoc.org/github.com/bradleyjkemp/cupaloy"><img src="https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg" alt="GoDoc" /></a>
+</p>
 
-`cupaloy` takes a snapshot of a given value and compares it to a snapshot committed alongside your tests. If the values don't match then you'll be forced to update the snapshot file before the test passes.
+Incredibly simple Go snapshot testing: `cupaloy` takes a snapshot of your test output and compares it to a snapshot committed alongside your tests. If the values don't match then you'll be forced to update the snapshot file before the test passes.
 
 Snapshot files are handled automagically: just use the `cupaloy.SnapshotT(t, value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file and compare it with the given value.
-
-### Installation
-```bash
-go get -u github.com/bradleyjkemp/cupaloy
-```
 
 ### Usage
 ```golang
@@ -27,6 +28,11 @@ To update the snapshots simply set the ```UPDATE_SNAPSHOTS``` environment variab
 UPDATE_SNAPSHOTS=true go test ./...
 ```
 This will fail all tests where the snapshot was updated (to stop you accidentally updating snapshots in CI) but your snapshot files will now have been updated to reflect the current output of your code.
+
+### Installation
+```bash
+go get -u github.com/bradleyjkemp/cupaloy
+```
 
 ### Further Examples
 #### Table driven tests
