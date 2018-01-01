@@ -87,9 +87,9 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 	if c.shouldUpdate() {
 		if snapshot != prevSnapshot {
 			return c.updateSnapshot(snapshotName, snapshot)
-		} else {
-			return nil
 		}
+
+		return nil
 	}
 
 	if snapshot != prevSnapshot {
