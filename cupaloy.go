@@ -84,18 +84,14 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 		return err
 	}
 
-	if c.shouldUpdate() {
-		if snapshot != prevSnapshot {
-			return c.updateSnapshot(snapshotName, snapshot)
-		}
-
+	if snapshot == prevSnapshot {
 		return nil
 	}
 
-	if snapshot != prevSnapshot {
-		diff := diffSnapshots(prevSnapshot, snapshot)
-		return fmt.Errorf("snapshot not equal:\n%s", diff)
+	if c.shouldUpdate() {
+		return c.updateSnapshot(snapshotName, snapshot)
 	}
 
-	return nil
+	diff := diffSnapshots(prevSnapshot, snapshot)
+	return fmt.Errorf("snapshot not equal:\n%s", diff)
 }
