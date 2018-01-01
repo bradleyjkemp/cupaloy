@@ -10,7 +10,7 @@
 // Usage
 //  func TestExample(t *testing.T) {
 //    result := someFunction()
-// 
+//
 //    // check that the result is the same as the last time the snapshot was updated
 //    // if the result has changed then the test will be failed with an error containing
 //    // a diff of the changes
