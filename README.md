@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://storage.googleapis.com/gopherizeme.appspot.com/gophers/433f5f3464537eb10606d497ab445423566cf929.png" width="250">
+    <img src="https://github.com/bradleyjkemp/cupaloy/blob/master/mascot.png" width="200">
     <br>
     <a href="https://travis-ci.org/bradleyjkemp/cupaloy"><img src="https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master" alt="Build Status" /></a>
     <a href="https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master"><img src="https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg" alt="Coverage Status" /></a>
