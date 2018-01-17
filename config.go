@@ -3,14 +3,27 @@ package cupaloy
 // Configurator is a functional option that can be passed to cupaloy.New() to change snapshotting behaviour.
 type Configurator func(*config)
 
-// EnvVariableName can be used to customize the environment variable that determines whether snapshots should be updated.
+// EnvVariableName can be used to customize the environment variable that determines whether snapshots should be updated
 // e.g.
 //  cupaloy.New(EnvVariableName("UPDATE"))
 // Will create an instance where snapshots will be updated if the UPDATE environment variable is set,
 // instead of the default of UPDATE_SNAPSHOTS.
 func EnvVariableName(name string) Configurator {
 	return func(c *config) {
-		c.envVariable = name
+		c.shouldUpdate = func() bool {
+			return envVariableSet(name)
+		}
+	}
+}
+
+// ShouldUpdate can be used to provide custom logic to decide whether or not to update a snapshot
+// e.g.
+//   var update = flag.Bool("update", false, "update snapshots")
+//   cupaloy.New(ShouldUpdate(func () bool { return *update })
+// Will create an instance where snapshots are updated if the --update flag is passed to go test.
+func ShouldUpdate(f func() bool) Configurator {
+	return func(c *config) {
+		c.shouldUpdate = f
 	}
 }
 
@@ -25,19 +38,13 @@ func SnapshotSubdirectory(name string) Configurator {
 }
 
 type config struct {
-	envVariable       string
-	subDirName        string
-	snapshotExtension string
+	shouldUpdate func() bool
+	subDirName   string
 }
 
 func defaultConfig() *config {
-	return &config{
-		envVariable:       "UPDATE_SNAPSHOTS",
-		subDirName:        ".snapshots",
-		snapshotExtension: "",
-	}
-}
-
-func (c *config) shouldUpdate() bool {
-	return envVariableSet(c.envVariable)
+	c := &config{}
+	SnapshotSubdirectory(".snapshots")(c)
+	EnvVariableName("UPDATE_SNAPSHOTS")(c)
+	return c
 }
