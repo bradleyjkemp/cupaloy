@@ -2,6 +2,7 @@ package examples_test
 
 import (
 	"io/ioutil"
+	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -82,5 +83,30 @@ func TestMultipleSnapshots(t *testing.T) {
 	t.Run("world", func(t *testing.T) {
 		result2 := "World"
 		cupaloy.New().SnapshotT(t, result2)
+	})
+}
+
+// Test the ShouldUpdate configurator
+func TestShouldUpdate(t *testing.T) {
+	t.Run("false", func(t *testing.T) {
+		result := "Hello!"
+		err := cupaloy.New(cupaloy.ShouldUpdate(func() bool { return false })).Snapshot(result)
+		if err == nil || !strings.Contains(err.Error(), "not equal") {
+			// not updating snapshot so error should contain a diff
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("true", func(t *testing.T) {
+		result := "Hello!"
+		c := cupaloy.New(cupaloy.ShouldUpdate(func() bool { return true }))
+		err := c.Snapshot(result)
+		if err == nil || !strings.Contains(err.Error(), "updated") {
+			// snapshot should have been updated with error signalling this
+			t.Fatal(err)
+		}
+
+		// snapshot again with old value to revert the update
+		c.Snapshot("Hello")
 	})
 }

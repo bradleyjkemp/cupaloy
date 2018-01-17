@@ -35,7 +35,7 @@ func envVariableSet(envVariable string) bool {
 }
 
 func (c *config) snapshotFilePath(testName string) string {
-	return filepath.Join(c.subDirName, testName+c.snapshotExtension)
+	return filepath.Join(c.subDirName, testName)
 }
 
 func takeSnapshot(i ...interface{}) string {
