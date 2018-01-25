@@ -84,11 +84,13 @@ func (c *config) snapshot(snapshotName string, i ...interface{}) error {
 		return err
 	}
 
-	if snapshot == prevSnapshot {
+	if snapshot == prevSnapshot || takeV1Snapshot(i...) == prevSnapshot {
+		// previous snapshot matches current value
 		return nil
 	}
 
 	if c.shouldUpdate() {
+		// updates snapshot to current value and upgrades snapshot format
 		return c.updateSnapshot(snapshotName, snapshot)
 	}
 

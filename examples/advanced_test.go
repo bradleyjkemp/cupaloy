@@ -1,6 +1,7 @@
 package examples_test
 
 import (
+	"bytes"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -13,7 +14,16 @@ func TestString(t *testing.T) {
 	result := "Hello advanced world!"
 	err := cupaloy.Snapshot(result)
 	if err != nil {
-		t.Fatal("Tests in different packages are independent of each other")
+		t.Fatal("Tests in different packages are independent of each other", err)
+	}
+}
+
+// New version of snapshot format should write out certain types directly
+func TestRawBytes(t *testing.T) {
+	result := bytes.NewBufferString("Hello advanced world!")
+	err := cupaloy.Snapshot(result.Bytes(), result, result.String())
+	if err != nil {
+		t.Fatal("New version of snapshot format should write out certain types directly", err)
 	}
 }
 
