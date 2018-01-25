@@ -1,6 +1,7 @@
 package cupaloy
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -38,8 +39,28 @@ func (c *config) snapshotFilePath(testName string) string {
 	return filepath.Join(c.subDirName, testName)
 }
 
-func takeSnapshot(i ...interface{}) string {
+// Legacy snapshot format where all items were spewed
+func takeV1Snapshot(i ...interface{}) string {
 	return spewConfig.Sdump(i...)
+}
+
+// New snapshot format where some types are written out raw to the file
+func takeSnapshot(i ...interface{}) string {
+	snapshot := &bytes.Buffer{}
+	for _, v := range i {
+		switch v.(type) {
+		case string:
+			snapshot.WriteString(v.(string))
+			snapshot.WriteString("\n")
+		case []byte:
+			snapshot.Write(v.([]byte))
+			snapshot.WriteString("\n")
+		default:
+			spewConfig.Fdump(snapshot, v)
+		}
+	}
+
+	return snapshot.String()
 }
 
 func (c *config) readSnapshot(snapshotName string) (string, error) {
