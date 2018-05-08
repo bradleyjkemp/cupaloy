@@ -8,7 +8,6 @@ get_dependencies:
 
 .PHONY: install_linters
 install_linters:
-	go get github.com/mattn/goveralls
 	go get github.com/alecthomas/gometalinter
 	$(GOPATH)/bin/gometalinter --install
 
