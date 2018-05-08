@@ -25,7 +25,7 @@ test-ci: coverage lint
 
 .PHONY: coverage
 coverage:
-	./coverage.sh
+	go test -v -coverpkg=all -coverprofile coverage.txt ./...
 
 .PHONY: clean
 clean:
