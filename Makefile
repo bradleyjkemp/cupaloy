@@ -3,6 +3,7 @@ install: get_dependencies install_linters
 
 .PHONY: get_dependencies
 get_dependencies:
+	go get github.com/mattn/goveralls
 	go get github.com/golang/dep/cmd/dep
 	$(GOPATH)/bin/dep ensure
 

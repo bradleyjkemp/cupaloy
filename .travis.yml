@@ -15,7 +15,7 @@ script:
   - make test-ci
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - $GOPATH/bin/goveralls -service=travis-ci -coverprofile=coverage.txt
 
 notifications:
   email:
