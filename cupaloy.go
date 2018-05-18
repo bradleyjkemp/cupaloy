@@ -48,11 +48,7 @@ func SnapshotMulti(snapshotID string, i ...interface{}) error {
 // SnapshotT calls Snapshotter.SnapshotT with the default config.
 func SnapshotT(t *testing.T, i ...interface{}) {
 	t.Helper()
-	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
-	err := defaultConfig().snapshot(snapshotName, i...)
-	if err != nil {
-		t.Error(err)
-	}
+	defaultConfig().SnapshotT(t, i...)
 }
 
 func (c *config) Snapshot(i ...interface{}) error {
@@ -66,10 +62,12 @@ func (c *config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 
 func (c *config) SnapshotT(t *testing.T, i ...interface{}) {
 	t.Helper()
-	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
-	err := c.snapshot(snapshotName, i...)
-	if err != nil {
-		t.Error(err)
+	if !t.Failed() {
+		snapshotName := strings.Replace(t.Name(), "/", "-", -1)
+		err := c.snapshot(snapshotName, i...)
+		if err != nil {
+			t.Error(err)
+		}
 	}
 }
 
