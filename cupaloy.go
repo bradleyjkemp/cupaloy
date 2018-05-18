@@ -62,9 +62,10 @@ func (c *config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 
 func (c *config) SnapshotT(t *testing.T, i ...interface{}) {
 	t.Helper()
-	if !t.Failed() {
+	if t.Failed() {
 		return
 	}
+	
 	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
 	err := c.snapshot(snapshotName, i...)
 	if err != nil {
