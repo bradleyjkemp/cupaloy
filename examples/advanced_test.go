@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/stretchr/testify/mock"
 )
 
 // Snapshots are isolated by package so test functions with the same name are fine
@@ -121,4 +122,24 @@ func TestShouldUpdate(t *testing.T) {
 		// snapshot again with old value to revert the update
 		c.Snapshot("Hello")
 	})
+}
+
+func TestFailedSnapshotT(t *testing.T) {
+	mockT := &TestingT{}
+	mockT.On("Helper").Return()
+	mockT.On("Failed").Return(false)
+	mockT.On("Name").Return(t.Name())
+	mockT.On("Error", mock.Anything).Return()
+
+	cupaloy.SnapshotT(mockT, "This should fail due to a mismatch")
+	mockT.AssertCalled(t, "Error", mock.Anything)
+}
+
+func TestFailedTestNoop(t *testing.T) {
+	mockT := &TestingT{}
+	mockT.On("Helper").Return()
+	mockT.On("Failed").Return(true)
+
+	cupaloy.SnapshotT(mockT, "This should not create a snapshot")
+	mockT.AssertNotCalled(t, "Error")
 }

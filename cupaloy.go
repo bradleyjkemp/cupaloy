@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"testing"
 )
 
 // New constructs a new, configured instance of cupaloy using the given Configurators.
@@ -24,7 +23,7 @@ func SnapshotMulti(snapshotID string, i ...interface{}) error {
 }
 
 // SnapshotT calls Snapshotter.SnapshotT with the default config.
-func SnapshotT(t *testing.T, i ...interface{}) {
+func SnapshotT(t TestingT, i ...interface{}) {
 	t.Helper()
 	defaultConfig().SnapshotT(t, i...)
 }
@@ -45,7 +44,7 @@ func (c *Config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 
 // SnapshotT is identical to Snapshot but gets the snapshot name using
 // t.Name() and calls t.Fail() directly if the snapshots do not match.
-func (c *Config) SnapshotT(t *testing.T, i ...interface{}) {
+func (c *Config) SnapshotT(t TestingT, i ...interface{}) {
 	t.Helper()
 	if t.Failed() {
 		return
