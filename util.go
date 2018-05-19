@@ -35,7 +35,7 @@ func envVariableSet(envVariable string) bool {
 	return varSet
 }
 
-func (c *config) snapshotFilePath(testName string) string {
+func (c *Config) snapshotFilePath(testName string) string {
 	return filepath.Join(c.subDirName, testName)
 }
 
@@ -63,7 +63,7 @@ func takeSnapshot(i ...interface{}) string {
 	return snapshot.String()
 }
 
-func (c *config) readSnapshot(snapshotName string) (string, error) {
+func (c *Config) readSnapshot(snapshotName string) (string, error) {
 	snapshotFile := c.snapshotFilePath(snapshotName)
 	buf, err := ioutil.ReadFile(snapshotFile)
 
@@ -78,7 +78,7 @@ func (c *config) readSnapshot(snapshotName string) (string, error) {
 	return string(buf), nil
 }
 
-func (c *config) updateSnapshot(snapshotName string, snapshot string) error {
+func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
 	// check that subdirectory exists before writing snapshot
 	err := os.MkdirAll(c.subDirName, os.ModePerm)
 	if err != nil {

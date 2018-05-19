@@ -7,31 +7,9 @@ import (
 	"testing"
 )
 
-// Snapshotter is the API for taking snapshots of values in your tests.
-type Snapshotter interface {
-	// Snapshot compares the given value to the it's previous value stored on the filesystem.
-	// An error containing a diff is returned if the snapshots do not match.
-	// Snapshot determines the snapshot file automatically from the name of the calling function.
-	Snapshot(i ...interface{}) error
-
-	// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
-	// This is done by providing a unique snapshotId for each invocation.
-	SnapshotMulti(snapshotID string, i ...interface{}) error
-
-	// SnapshotT is identical to Snapshot but gets the snapshot name using
-	// t.Name() and calls t.Fail() directly if the snapshots do not match.
-	SnapshotT(t *testing.T, i ...interface{})
-}
-
 // New constructs a new, configured instance of cupaloy using the given Configurators.
-func New(configurators ...Configurator) Snapshotter {
-	config := defaultConfig()
-
-	for _, configurator := range configurators {
-		configurator(config)
-	}
-
-	return config
+func New(configurators ...Configurator) *Config {
+	return defaultConfig().WithOptions(configurators...)
 }
 
 // Snapshot calls Snapshotter.Snapshot with the default config.
@@ -51,21 +29,28 @@ func SnapshotT(t *testing.T, i ...interface{}) {
 	defaultConfig().SnapshotT(t, i...)
 }
 
-func (c *config) Snapshot(i ...interface{}) error {
+// Snapshot compares the given value to the it's previous value stored on the filesystem.
+// An error containing a diff is returned if the snapshots do not match.
+// Snapshot determines the snapshot file automatically from the name of the calling function.
+func (c *Config) Snapshot(i ...interface{}) error {
 	return c.snapshot(getNameOfCaller(), i...)
 }
 
-func (c *config) SnapshotMulti(snapshotID string, i ...interface{}) error {
+// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
+// This is done by providing a unique snapshotId for each invocation.
+func (c *Config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotID)
 	return c.snapshot(snapshotName, i...)
 }
 
-func (c *config) SnapshotT(t *testing.T, i ...interface{}) {
+// SnapshotT is identical to Snapshot but gets the snapshot name using
+// t.Name() and calls t.Fail() directly if the snapshots do not match.
+func (c *Config) SnapshotT(t *testing.T, i ...interface{}) {
 	t.Helper()
 	if t.Failed() {
 		return
 	}
-	
+
 	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
 	err := c.snapshot(snapshotName, i...)
 	if err != nil {
@@ -73,7 +58,20 @@ func (c *config) SnapshotT(t *testing.T, i ...interface{}) {
 	}
 }
 
-func (c *config) snapshot(snapshotName string, i ...interface{}) error {
+// WithOptions allows the modification of an existing Config. This can usefully be
+// used to use a different option for a single call e.g.
+//  snapshotter.WithOptions(cupaloy.SnapshotSubdirectory("testdata")).SnapshotT(t, result)
+func (c *Config) WithOptions(configurators ...Configurator) *Config {
+	clonedConfig := c.clone()
+
+	for _, configurator := range configurators {
+		configurator(clonedConfig)
+	}
+
+	return clonedConfig
+}
+
+func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 	snapshot := takeSnapshot(i...)
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)
