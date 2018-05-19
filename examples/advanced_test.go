@@ -40,6 +40,8 @@ func TestConfig(t *testing.T) {
 	if err != nil {
 		t.Fatalf("The config struct has all the same methods as the default %s", err)
 	}
+
+	snapshotter.WithOptions(cupaloy.SnapshotSubdirectory("testdata")).SnapshotT(t, "Hello world!")
 }
 
 // If a snapshot is updated then this returns an error
