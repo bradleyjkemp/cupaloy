@@ -22,6 +22,16 @@ var spewConfig = spew.ConfigState{
 	SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
 }
 
+//go:generate $GOPATH/bin/mockery -output=examples -outpkg=examples_test -testonly -name=TestingT
+
+// TestingT is a subset of the interface testing.TB allowing it to be mocked in tests.
+type TestingT interface {
+	Helper()
+	Failed() bool
+	Error(args ...interface{})
+	Name() string
+}
+
 func getNameOfCaller() string {
 	pc, _, _, _ := runtime.Caller(2) // first caller is the caller of this function, we want the caller of our caller
 	fullPath := runtime.FuncForPC(pc).Name()
