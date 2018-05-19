@@ -15,7 +15,7 @@ script:
   - make test-ci
 
 after_success:
-  - $GOPATH/bin/goveralls -service=travis-ci -coverprofile=coverage.txt
+  - $GOPATH/bin/goveralls -service=travis-ci -coverprofile=coverage.out
 
 notifications:
   email:
