@@ -75,6 +75,10 @@ func takeSnapshot(i ...interface{}) string {
 
 func (c *Config) readSnapshot(snapshotName string) (string, error) {
 	snapshotFile := c.snapshotFilePath(snapshotName)
+	
+	/* #nosec */
+	// disable gosec checks for this line
+	// complains because we're reading a file based on a name unkown at compile time
 	buf, err := ioutil.ReadFile(snapshotFile)
 
 	if os.IsNotExist(err) {
