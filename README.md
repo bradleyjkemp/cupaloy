@@ -8,32 +8,37 @@
     <a href="https://sourcegraph.com/github.com/bradleyjkemp/cupaloy?badge"><img src="https://sourcegraph.com/github.com/bradleyjkemp/cupaloy/-/badge.svg" alt="Number of users" /></a>
 </h1>
 
-Incredibly simple Go snapshot testing: `cupaloy` takes a snapshot of your test output and compares it to a snapshot committed alongside your tests. If the values don't match then you'll be forced to update the snapshot file before the test passes.
+Incredibly simple Go snapshot testing: `cupaloy` takes a snapshot of your test output and compares it to a snapshot committed alongside your tests. If the values don't match then the test will be failed.
 
-Snapshot files are handled automagically: just use the `cupaloy.SnapshotT(t, value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file and compare it with the given value.
+There's no need to manually manage snapshot files: just use the `cupaloy.SnapshotT(t, value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file (based on the test name) and compare it with the given value.
 
-### Usage
+## Usage
+### Write a test
+Firstly, write a test case generating some output and pass this output to `cupaloy.SnapshotT`:
 ```golang
-func TestExample(t *testing.T) {
-    result := someFunction()
+func TestParsing(t *testing.T) {
+    ast := ParseFile("test_input")
 
     // check that the result is the same as the last time the snapshot was updated
-    // if the result has changed then the test will be failed with an error containing
-    // a diff of the changes
-    cupaloy.SnapshotT(t, result)
+    // if the result has changed (e.g. because the behaviour of the parser has changed)
+    // then the test will be failed with an error containing a diff of the changes
+    cupaloy.SnapshotT(t, ast)
 }
 ```
+The first time this test is run, a snapshot will be automatically created (using the [github.com/davecgh/go-spew](https://github.com/davecgh/go-spew) package).
 
-To update the snapshots simply set the ```UPDATE_SNAPSHOTS``` environment variable and run your tests e.g.
+### Update a snapshot
+When the behaviour of your software changes causing the snapshot to change, this test will begin to fail with an error showing the difference between the old and new snapshots. Once you are happy that the new snapshot is correct (and hasn't just changed unexpectedly), you can save the new snapshot by setting the ```UPDATE_SNAPSHOTS``` environment and re-running your tests:
 ```bash
 UPDATE_SNAPSHOTS=true go test ./...
 ```
 This will fail all tests where the snapshot was updated (to stop you accidentally updating snapshots in CI) but your snapshot files will now have been updated to reflect the current output of your code.
 
-### Installation
-```bash
-go get -u github.com/bradleyjkemp/cupaloy
-```
+### Supported formats
+Snapshots of test output are generated using the [github.com/davecgh/go-spew](https://github.com/davecgh/go-spew) package which uses reflection to deep pretty-print your test result and so will support almost all the basic types (from simple strings, slices, and maps to deeply nested structs) without issue. The only types whose contents cannot be fully pretty-printed are functions and channels.
+
+The most important property of your test output is that it is deterministic: if your output contains timestamps or other fields which will change on every run, then `cupaloy` will detect this as a change and so fail the test.
+
 
 ### Further Examples
 #### Table driven tests
