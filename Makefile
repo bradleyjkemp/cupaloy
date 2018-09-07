@@ -9,12 +9,14 @@ get_dependencies:
 
 .PHONY: install_linters
 install_linters:
-	go get github.com/alecthomas/gometalinter
+	go get -u github.com/alecthomas/gometalinter
 	$(GOPATH)/bin/gometalinter --install
 
 .PHONY: lint
 lint:
-	$(GOPATH)/bin/gometalinter --vendor ./...
+	$(GOPATH)/bin/gometalinter \
+	--disable=gosec \
+	--vendor ./...
 
 .PHONY: test
 test: lint
