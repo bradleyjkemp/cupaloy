@@ -37,22 +37,42 @@ func SnapshotSubdirectory(name string) Configurator {
 	}
 }
 
+func FailOnUpdate(failOnUpdate bool) Configurator {
+	return func(c *Config) {
+		c.failOnUpdate = failOnUpdate
+	}
+}
+
+func CreateNewAutomatically(createNewAutomatically bool) Configurator {
+	return func(c *Config) {
+		c.createNewAutomatically = createNewAutomatically
+	}
+}
+
 // Config provides the same snapshotting functions with additional configuration capabilities.
 type Config struct {
 	shouldUpdate func() bool
 	subDirName   string
+	failOnUpdate bool
+	createNewAutomatically bool
 }
 
-func defaultConfig() *Config {
+func NewDefaultConfig() *Config {
 	return (&Config{}).WithOptions(
 		SnapshotSubdirectory(".snapshots"),
 		EnvVariableName("UPDATE_SNAPSHOTS"),
+		FailOnUpdate(true),
+		CreateNewAutomatically(true),
 	)
 }
+
+var Global = NewDefaultConfig()
 
 func (c *Config) clone() *Config {
 	return &Config{
 		shouldUpdate: c.shouldUpdate,
 		subDirName:   c.subDirName,
+		failOnUpdate: c.failOnUpdate,
+		createNewAutomatically: c.createNewAutomatically,
 	}
 }

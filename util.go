@@ -108,6 +108,11 @@ func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
 		return fmt.Errorf("snapshot created for test %s", snapshotName)
 	}
 
+	if !c.failOnUpdate {
+		//TODO: should a warning still be printed here?
+		return nil
+	}
+
 	return fmt.Errorf("snapshot updated for test %s", snapshotName)
 }
 
