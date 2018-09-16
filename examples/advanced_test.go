@@ -173,3 +173,15 @@ func TestGlobalCreateNewAutomatically(t *testing.T) {
 	cupaloy.SnapshotT(mockT, "This should fail because doesn't exist")
 	mockT.AssertNotCalled(t, "Error")
 }
+
+func TestFailOnUpdate(t *testing.T) {
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("GOPATH"), cupaloy.FailOnUpdate(false))
+
+
+	err := snapshotter.Snapshot("Hello new world")
+	if err != nil {
+		t.Fatal("FailOnUpdate(false) should disable errors when updating snapshots")
+	}
+
+	snapshotter.Snapshot("Hello world") // reset snapshot to known state (ignoring return value)
+}
