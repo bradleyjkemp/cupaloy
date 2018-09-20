@@ -172,7 +172,7 @@ func TestGlobalCreateNewAutomatically(t *testing.T) {
 	mockT.On("Error", mock.Anything).Return()
 
 	cupaloy.SnapshotT(mockT, "This should fail because doesn't exist")
-	mockT.AssertCalled(t, "Error")
+	mockT.AssertCalled(t, "Error", mock.Anything)
 }
 
 func TestFailOnUpdate(t *testing.T) {
