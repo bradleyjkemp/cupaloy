@@ -80,8 +80,7 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 		if c.createNewAutomatically {
 			return c.updateSnapshot(snapshotName, snapshot)
 		}
-		//TODO: should an error still be printed here?
-		return nil
+		return fmt.Errorf("snapshot does not exist for test %s", snapshotName)
 	}
 	if err != nil {
 		return err
