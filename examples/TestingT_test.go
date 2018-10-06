@@ -15,6 +15,13 @@ func (_m *TestingT) Error(args ...interface{}) {
 	_m.Called(_ca...)
 }
 
+// Fatal provides a mock function with given fields: args
+func (_m *TestingT) Fatal(args ...interface{}) {
+	var _ca []interface{}
+	_ca = append(_ca, args...)
+	_m.Called(_ca...)
+}
+
 // Failed provides a mock function with given fields:
 func (_m *TestingT) Failed() bool {
 	ret := _m.Called()

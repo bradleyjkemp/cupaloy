@@ -57,12 +57,19 @@ func CreateNewAutomatically(createNewAutomatically bool) Configurator {
 	}
 }
 
+func FatalOnMismatch(fatalOnMismatch bool) Configurator {
+	return func(c *Config) {
+		c.fatalOnMismatch = fatalOnMismatch
+	}
+}
+
 // Config provides the same snapshotting functions with additional configuration capabilities.
 type Config struct {
-	shouldUpdate func() bool
-	subDirName   string
-	failOnUpdate bool
+	shouldUpdate           func() bool
+	subDirName             string
+	failOnUpdate           bool
 	createNewAutomatically bool
+	fatalOnMismatch        bool
 }
 
 // NewDefaultConfig returns a new Config instance initialised with the same options as
@@ -73,6 +80,7 @@ func NewDefaultConfig() *Config {
 		EnvVariableName("UPDATE_SNAPSHOTS"),
 		FailOnUpdate(true),
 		CreateNewAutomatically(true),
+		FatalOnMismatch(false),
 	)
 }
 
@@ -81,9 +89,10 @@ var Global = NewDefaultConfig()
 
 func (c *Config) clone() *Config {
 	return &Config{
-		shouldUpdate: c.shouldUpdate,
-		subDirName:   c.subDirName,
-		failOnUpdate: c.failOnUpdate,
+		shouldUpdate:           c.shouldUpdate,
+		subDirName:             c.subDirName,
+		failOnUpdate:           c.failOnUpdate,
 		createNewAutomatically: c.createNewAutomatically,
+		fatalOnMismatch:        c.fatalOnMismatch,
 	}
 }
