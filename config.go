@@ -57,6 +57,9 @@ func CreateNewAutomatically(createNewAutomatically bool) Configurator {
 	}
 }
 
+// FatalOnMismatch controls whether failed tests should fail using t.Fatal which should
+// immediately stop any remaining tests. Will use t.Error on false.
+// Default: false
 func FatalOnMismatch(fatalOnMismatch bool) Configurator {
 	return func(c *Config) {
 		c.fatalOnMismatch = fatalOnMismatch
