@@ -53,6 +53,10 @@ func (c *Config) SnapshotT(t TestingT, i ...interface{}) {
 	snapshotName := strings.Replace(t.Name(), "/", "-", -1)
 	err := c.snapshot(snapshotName, i...)
 	if err != nil {
+		if c.fatalOnMismatch {
+			t.Fatal(err)
+			return
+		}
 		t.Error(err)
 	}
 }

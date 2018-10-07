@@ -29,6 +29,7 @@ type TestingT interface {
 	Helper()
 	Failed() bool
 	Error(args ...interface{})
+	Fatal(args ...interface{})
 	Name() string
 }
 
