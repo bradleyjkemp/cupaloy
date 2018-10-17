@@ -20,6 +20,7 @@ var spewConfig = spew.ConfigState{
 	DisablePointerAddresses: true, // don't spew the addresses of pointers
 	DisableCapacities:       true, // don't spew capacities of collections
 	SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
+	DisableMethods:          true, // don't call Stringer or Error methods: these can hide large sections of results
 }
 
 //go:generate $GOPATH/bin/mockery -output=examples -outpkg=examples_test -testonly -name=TestingT
@@ -109,7 +110,7 @@ func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
 		//TODO: should a warning still be printed here?
 		return nil
 	}
-	
+
 	if isNewSnapshot {
 		return fmt.Errorf("snapshot created for test %s", snapshotName)
 	}
