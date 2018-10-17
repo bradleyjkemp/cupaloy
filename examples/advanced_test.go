@@ -202,3 +202,21 @@ func TestGlobalFatalOnMismatch(t *testing.T) {
 	mockT.AssertNotCalled(t, "Error", mock.Anything)
 	mockT.AssertCalled(t, "Fatal", mock.Anything)
 }
+
+type stringer struct {
+	t *testing.T
+}
+
+func (s stringer) String() {
+	s.t.Fail()
+}
+
+func TestDoesNotCallStringer(t *testing.T) {
+	// testing.T contains timestamps so highly variable
+	// therefore blindly update it and don't care that it's changed
+	cupaloy.New(
+		cupaloy.SnapshotSubdirectory("ignored"),
+		cupaloy.ShouldUpdate(func() bool { return true }),
+		cupaloy.FailOnUpdate(false)).
+		SnapshotT(t, stringer{t})
+}
