@@ -47,7 +47,7 @@ func envVariableSet(envVariable string) bool {
 }
 
 func (c *Config) snapshotFilePath(testName string) string {
-	return filepath.Join(c.subDirName, testName)
+	return filepath.Join(c.subDirName, testName+c.snapshotFileExtension)
 }
 
 // Legacy snapshot format where all items were spewed
@@ -109,7 +109,7 @@ func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
 		//TODO: should a warning still be printed here?
 		return nil
 	}
-	
+
 	if isNewSnapshot {
 		return fmt.Errorf("snapshot created for test %s", snapshotName)
 	}
