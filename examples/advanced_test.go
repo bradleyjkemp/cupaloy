@@ -202,3 +202,8 @@ func TestGlobalFatalOnMismatch(t *testing.T) {
 	mockT.AssertNotCalled(t, "Error", mock.Anything)
 	mockT.AssertCalled(t, "Fatal", mock.Anything)
 }
+
+func TestSnapshotFileExtension(t *testing.T) {
+	snapshotter := cupaloy.New(cupaloy.SnapshotFileExtension(".myextension"))
+	snapshotter.SnapshotT(t, "This should end up in a file with extension .myextension")
+}

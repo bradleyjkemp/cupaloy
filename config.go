@@ -66,6 +66,16 @@ func FatalOnMismatch(fatalOnMismatch bool) Configurator {
 	}
 }
 
+// SnapshotFileExtension allows you to change the extension of the snapshot files
+// that are written. E.g. if you're snapshotting HTML then adding SnapshotFileExtension(".html")
+// will allow for more easier viewing of snapshots.
+// Default: "", no extension is added.
+func SnapshotFileExtension(snapshotFileExtension string) Configurator {
+	return func(c *Config) {
+		c.snapshotFileExtension = snapshotFileExtension
+	}
+}
+
 // Config provides the same snapshotting functions with additional configuration capabilities.
 type Config struct {
 	shouldUpdate           func() bool
@@ -73,6 +83,7 @@ type Config struct {
 	failOnUpdate           bool
 	createNewAutomatically bool
 	fatalOnMismatch        bool
+	snapshotFileExtension  string
 }
 
 // NewDefaultConfig returns a new Config instance initialised with the same options as
@@ -84,6 +95,7 @@ func NewDefaultConfig() *Config {
 		FailOnUpdate(true),
 		CreateNewAutomatically(true),
 		FatalOnMismatch(false),
+		SnapshotFileExtension(""),
 	)
 }
 
@@ -97,5 +109,6 @@ func (c *Config) clone() *Config {
 		failOnUpdate:           c.failOnUpdate,
 		createNewAutomatically: c.createNewAutomatically,
 		fatalOnMismatch:        c.fatalOnMismatch,
+		snapshotFileExtension:  c.snapshotFileExtension,
 	}
 }
