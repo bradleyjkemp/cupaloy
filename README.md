@@ -5,7 +5,6 @@
     <a href="https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master"><img src="https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg" alt="Coverage Status" /></a>
     <a href="https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy"><img src="https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy" alt="Go Report Card" /></a>
     <a href="https://godoc.org/github.com/bradleyjkemp/cupaloy"><img src="https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg" alt="GoDoc" /></a>
-    <a href="https://sourcegraph.com/github.com/bradleyjkemp/cupaloy?badge"><img src="https://sourcegraph.com/github.com/bradleyjkemp/cupaloy/-/badge.svg" alt="Number of users" /></a>
 </h1>
 
 Incredibly simple Go snapshot testing: `cupaloy` takes a snapshot of your test output and compares it to a snapshot committed alongside your tests. If the values don't match then the test will be failed.
