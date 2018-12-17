@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-// New constructs a new, configured instance of cupaloy using the given Configurators applied to the default config.
+// New constructs a new, configured instance of cupaloy using the given
+// Configurators applied to the default config.
 func New(configurators ...Configurator) *Config {
 	return NewDefaultConfig().WithOptions(configurators...)
 }
@@ -28,22 +29,40 @@ func SnapshotT(t TestingT, i ...interface{}) {
 	Global.SnapshotT(t, i...)
 }
 
-// Snapshot compares the given value to the it's previous value stored on the filesystem.
-// An error containing a diff is returned if the snapshots do not match.
+// Snapshot compares the given variable to its previous value stored on the filesystem.
+// An error containing a diff is returned if the snapshots do not match, or if a new
+// snapshot was created.
+//
 // Snapshot determines the snapshot file automatically from the name of the calling function.
+// As a result it can be called at most once per function. If you want to call Snapshot
+// multiple times in a function, if possible, instead collect the values and call Snapshot
+// with all values at once. Otherwise see SnapshotMulti.
+//
+// If using snapshots in tests, prefer the SnapshotT function which fails the test
+// directly, rather than requiring your to remember to check the error.
 func (c *Config) Snapshot(i ...interface{}) error {
 	return c.snapshot(getNameOfCaller(), i...)
 }
 
-// SnapshotMulti is identical to Snapshot but can be called multiple times from the same function.
-// This is done by providing a unique snapshotId for each invocation.
+// SnapshotMulti is similar to Snapshot but can be called multiple times from the
+// same function. This is possible by providing a unique id for each snapshot which is
+// appended to the function name to form the snapshot name.
 func (c *Config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotID)
 	return c.snapshot(snapshotName, i...)
 }
 
-// SnapshotT is identical to Snapshot but gets the snapshot name using
-// t.Name() and calls t.Fail() directly if the snapshots do not match.
+// SnapshotT compares the given variable to the its previous value stored on the filesystem.
+// The current test is failed (with error containing a diff) if the values do not match, or
+// if a new snapshot was created.
+//
+// SnapshotT determines the snapshot file automatically from the name of the test (using
+// the t.Name() function). As a result, SnapshotT can be called at most once per test.
+// If you want to call SnapshotT multiple times in a test, if possible, instead collect the
+// values and call SnapshotT with all values at once. Alternatively, use sub-tests and call
+// SnapshotT once in each.
+//
+// If using snapshots in tests, SnapshotT is preferred over Snapshot and SnapshotMulti.
 func (c *Config) SnapshotT(t TestingT, i ...interface{}) {
 	t.Helper()
 	if t.Failed() {
