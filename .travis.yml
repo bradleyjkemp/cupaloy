@@ -4,6 +4,9 @@ go:
   - 1.x
   - master
 
+env:
+  - GO111MODULE=true
+
 matrix:
   allow_failures:
     - go: master
