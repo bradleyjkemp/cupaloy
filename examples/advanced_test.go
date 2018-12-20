@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bradleyjkemp/cupaloy"
+	"github.com/bradleyjkemp/cupaloy/v2"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -48,7 +48,7 @@ func TestConfig(t *testing.T) {
 // If a snapshot is updated then this returns an error
 // This is to prevent you accidentally updating your snapshots in CI
 func TestUpdate(t *testing.T) {
-	snapshotter := cupaloy.New(cupaloy.EnvVariableName("GOPATH"))
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("HOME"))
 
 	err := snapshotter.Snapshot("Hello world")
 	if err != nil {
@@ -176,7 +176,7 @@ func TestGlobalCreateNewAutomatically(t *testing.T) {
 }
 
 func TestFailOnUpdate(t *testing.T) {
-	snapshotter := cupaloy.New(cupaloy.EnvVariableName("GOPATH"), cupaloy.FailOnUpdate(false))
+	snapshotter := cupaloy.New(cupaloy.EnvVariableName("HOME"), cupaloy.FailOnUpdate(false))
 
 	err := snapshotter.Snapshot("Hello new world")
 	if err != nil {
