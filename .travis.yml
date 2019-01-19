@@ -4,10 +4,6 @@ go:
   - 1.x
   - master
 
-env:
-  global:
-    - GO111MODULE=true
-
 matrix:
   allow_failures:
     - go: master
@@ -29,3 +25,4 @@ notifications:
 env:
   global:
     - MAKEFLAGS=" -j 2"
+    - GO111MODULE=true
