@@ -5,7 +5,8 @@ go:
   - master
 
 env:
-  - GO111MODULE=true
+  global:
+    - GO111MODULE=true
 
 matrix:
   allow_failures:
