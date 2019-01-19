@@ -59,12 +59,12 @@ func takeV1Snapshot(i ...interface{}) string {
 func takeSnapshot(i ...interface{}) string {
 	snapshot := &bytes.Buffer{}
 	for _, v := range i {
-		switch v.(type) {
+		switch vt := v.(type) {
 		case string:
-			snapshot.WriteString(v.(string))
+			snapshot.WriteString(vt)
 			snapshot.WriteString("\n")
 		case []byte:
-			snapshot.Write(v.([]byte))
+			snapshot.Write(vt)
 			snapshot.WriteString("\n")
 		default:
 			spewConfig.Fdump(snapshot, v)
