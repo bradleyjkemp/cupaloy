@@ -4,19 +4,14 @@ install: get_dependencies install_linters
 .PHONY: get_dependencies
 get_dependencies:
 	go get github.com/mattn/goveralls
-	go get github.com/golang/dep/cmd/dep
-	$(GOPATH)/bin/dep ensure
 
 .PHONY: install_linters
 install_linters:
-	go get -u github.com/alecthomas/gometalinter
-	$(GOPATH)/bin/gometalinter --install
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.12.5
 
 .PHONY: lint
 lint:
-	$(GOPATH)/bin/gometalinter \
-	--disable=gosec \
-	--vendor ./...
+	$(GOPATH)/bin/golangci-lint run
 
 .PHONY: test
 test: lint
