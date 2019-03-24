@@ -105,7 +105,7 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 		if c.createNewAutomatically {
 			return c.updateSnapshot(snapshotName, prevSnapshot, snapshot)
 		}
-		return internal.ErrNoSnapshot{snapshotName}
+		return internal.ErrNoSnapshot{Name: snapshotName}
 	}
 	if err != nil {
 		return err
