@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/bradleyjkemp/cupaloy/v2/internal"
 )
 
 // New constructs a new, configured instance of cupaloy using the given
@@ -101,9 +103,9 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 	prevSnapshot, err := c.readSnapshot(snapshotName)
 	if os.IsNotExist(err) {
 		if c.createNewAutomatically {
-			return c.updateSnapshot(snapshotName, snapshot)
+			return c.updateSnapshot(snapshotName, prevSnapshot, snapshot)
 		}
-		return fmt.Errorf("snapshot does not exist for test %s", snapshotName)
+		return internal.ErrNoSnapshot{snapshotName}
 	}
 	if err != nil {
 		return err
@@ -116,9 +118,10 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 
 	if c.shouldUpdate() {
 		// updates snapshot to current value and upgrades snapshot format
-		return c.updateSnapshot(snapshotName, snapshot)
+		return c.updateSnapshot(snapshotName, prevSnapshot, snapshot)
 	}
 
-	diff := diffSnapshots(prevSnapshot, snapshot)
-	return fmt.Errorf("snapshot not equal:\n%s", diff)
+	return internal.ErrSnapshotMismatch{
+		Diff: diffSnapshots(prevSnapshot, snapshot),
+	}
 }

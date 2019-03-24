@@ -3,12 +3,13 @@ package cupaloy
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/bradleyjkemp/cupaloy/v2/internal"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/pmezard/go-difflib/difflib"
@@ -89,7 +90,7 @@ func (c *Config) readSnapshot(snapshotName string) (string, error) {
 	return string(buf), nil
 }
 
-func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
+func (c *Config) updateSnapshot(snapshotName string, prevSnapshot string, snapshot string) error {
 	// check that subdirectory exists before writing snapshot
 	err := os.MkdirAll(c.subDirName, os.ModePerm)
 	if err != nil {
@@ -110,11 +111,19 @@ func (c *Config) updateSnapshot(snapshotName string, snapshot string) error {
 		return nil
 	}
 
+	snapshotDiff := diffSnapshots(prevSnapshot, snapshot)
+
 	if isNewSnapshot {
-		return fmt.Errorf("snapshot created for test %s", snapshotName)
+		return internal.ErrSnapshotCreated{
+			Name:     snapshotName,
+			Contents: snapshot,
+		}
 	}
 
-	return fmt.Errorf("snapshot updated for test %s", snapshotName)
+	return internal.ErrSnapshotUpdated{
+		Name: snapshotName,
+		Diff: snapshotDiff,
+	}
 }
 
 func diffSnapshots(previous, current string) string {
