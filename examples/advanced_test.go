@@ -2,6 +2,7 @@ package examples_test
 
 import (
 	"bytes"
+	"github.com/bradleyjkemp/cupaloy/v2/internal"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -49,6 +50,7 @@ func TestConfig(t *testing.T) {
 // This is to prevent you accidentally updating your snapshots in CI
 func TestUpdate(t *testing.T) {
 	snapshotter := cupaloy.New(cupaloy.EnvVariableName("HOME"))
+	defer snapshotter.Snapshot("Hello world") // reset snapshot to known state
 
 	err := snapshotter.Snapshot("Hello world")
 	if err != nil {
@@ -59,11 +61,11 @@ func TestUpdate(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Updating a snapshot with a new value is always an error %s", err)
 	}
-	if err.Error() != "snapshot updated for test examples_test-TestUpdate" {
-		t.Fatalf("Error returned will say that snapshot was updated")
+	if _, ok := err.(internal.ErrSnapshotUpdated); !ok {
+		t.Fatalf("Error returned will be of type ErrSnapshotUpdated")
 	}
 
-	snapshotter.Snapshot("Hello world") // reset snapshot to known state
+
 }
 
 // If a snapshot doesn't exist then it is created and an error returned
@@ -81,8 +83,8 @@ func TestMissingSnapshot(t *testing.T) {
 	if err == nil {
 		t.Fatalf("This will always return an error %s", err)
 	}
-	if err.Error() != "snapshot created for test examples_test-TestMissingSnapshot" {
-		t.Fatalf("Error returned will say that snapshot was created %s", err)
+	if _, ok := err.(internal.ErrSnapshotCreated); !ok {
+		t.Fatalf("Error returned will be of type ErrSnapshotCreated")
 	}
 }
 
