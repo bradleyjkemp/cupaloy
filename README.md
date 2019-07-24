@@ -12,6 +12,9 @@ Incredibly simple Go snapshot testing: `cupaloy` takes a snapshot of your test o
 There's no need to manually manage snapshot files: just use the `cupaloy.SnapshotT(t, value)` function in your tests and `cupaloy` will automatically find the relevant snapshot file (based on the test name) and compare it with the given value.
 
 ## Usage
+### Installing
+If you're using Go modules you can use this package by importing `github.com/bradleyjkemp/cupaloy/v2` in your code and then `go build`, `go test`, etc. will automatically download it for you.
+
 ### Write a test
 Firstly, write a test case generating some output and pass this output to `cupaloy.SnapshotT`:
 ```golang
