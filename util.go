@@ -111,7 +111,7 @@ func (c *Config) updateSnapshot(snapshotName string, prevSnapshot string, snapsh
 		return nil
 	}
 
-	snapshotDiff := diffSnapshots(prevSnapshot, snapshot)
+	snapshotDiff := c.diffSnapshots(prevSnapshot, snapshot)
 
 	if isNewSnapshot {
 		return internal.ErrSnapshotCreated{
