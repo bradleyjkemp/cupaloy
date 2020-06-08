@@ -122,6 +122,6 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 	}
 
 	return internal.ErrSnapshotMismatch{
-		Diff: diffSnapshots(prevSnapshot, snapshot),
+		Diff: c.diffSnapshots(prevSnapshot, snapshot),
 	}
 }
