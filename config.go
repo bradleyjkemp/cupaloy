@@ -76,6 +76,15 @@ func SnapshotFileExtension(snapshotFileExtension string) Configurator {
 	}
 }
 
+// UseStringerMethods invoke String() or Error() methods when available rather than dumping the object.
+// This should probably be disabled by default but is not for backwards compatibility reasons.
+// Default: true
+func UseStringerMethods(useStringerMethods bool) Configurator {
+	return func(c *Config) {
+		c.useStringerMethods = useStringerMethods
+	}
+}
+
 // Config provides the same snapshotting functions with additional configuration capabilities.
 type Config struct {
 	shouldUpdate           func() bool
@@ -84,6 +93,7 @@ type Config struct {
 	createNewAutomatically bool
 	fatalOnMismatch        bool
 	snapshotFileExtension  string
+	useStringerMethods     bool
 }
 
 // NewDefaultConfig returns a new Config instance initialised with the same options as
@@ -96,6 +106,7 @@ func NewDefaultConfig() *Config {
 		CreateNewAutomatically(true),
 		FatalOnMismatch(false),
 		SnapshotFileExtension(""),
+		UseStringerMethods(true),
 	)
 }
 
@@ -110,5 +121,6 @@ func (c *Config) clone() *Config {
 		createNewAutomatically: c.createNewAutomatically,
 		fatalOnMismatch:        c.fatalOnMismatch,
 		snapshotFileExtension:  c.snapshotFileExtension,
+		useStringerMethods:     c.useStringerMethods,
 	}
 }

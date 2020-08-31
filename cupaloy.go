@@ -98,7 +98,7 @@ func (c *Config) WithOptions(configurators ...Configurator) *Config {
 }
 
 func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
-	snapshot := takeSnapshot(i...)
+	snapshot := c.takeSnapshot(i...)
 
 	prevSnapshot, err := c.readSnapshot(snapshotName)
 	if os.IsNotExist(err) {
@@ -111,7 +111,7 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 		return err
 	}
 
-	if snapshot == prevSnapshot || takeV1Snapshot(i...) == prevSnapshot {
+	if snapshot == prevSnapshot || c.takeV1Snapshot(i...) == prevSnapshot {
 		// previous snapshot matches current value
 		return nil
 	}
