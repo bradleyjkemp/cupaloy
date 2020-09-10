@@ -2,10 +2,11 @@ package examples_test
 
 import (
 	"bytes"
-	"github.com/bradleyjkemp/cupaloy/v2/internal"
 	"io/ioutil"
 	"strings"
 	"testing"
+
+	"github.com/bradleyjkemp/cupaloy/v2/internal"
 
 	"github.com/bradleyjkemp/cupaloy/v2"
 	"github.com/stretchr/testify/mock"
@@ -64,7 +65,6 @@ func TestUpdate(t *testing.T) {
 	if _, ok := err.(internal.ErrSnapshotUpdated); !ok {
 		t.Fatalf("Error returned will be of type ErrSnapshotUpdated")
 	}
-
 
 }
 
@@ -208,4 +208,23 @@ func TestGlobalFatalOnMismatch(t *testing.T) {
 func TestSnapshotFileExtension(t *testing.T) {
 	snapshotter := cupaloy.New(cupaloy.SnapshotFileExtension(".myextension"))
 	snapshotter.SnapshotT(t, "This should end up in a file with extension .myextension")
+}
+
+type stringer struct {
+}
+
+func (s stringer) String() string {
+	return "with stringer"
+}
+
+func TestUseStringerMethods(t *testing.T) {
+	s := stringer{}
+
+	t.Run("enabled", func(t *testing.T) {
+		cupaloy.New(cupaloy.UseStringerMethods(true)).SnapshotT(t, s)
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		cupaloy.New(cupaloy.UseStringerMethods(false)).SnapshotT(t, s)
+	})
 }
