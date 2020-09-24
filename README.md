@@ -1,7 +1,7 @@
 <h1 align="center">
     <img src="https://github.com/bradleyjkemp/cupaloy/blob/master/mascot.png" alt="Mascot" width="200">
     <br>
-    <a href="https://travis-ci.org/bradleyjkemp/cupaloy"><img src="https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master" alt="Build Status" /></a>
+    <img src="https://github.com/bradleyjkemp/cupaloy/workflows/Go/badge.svg" alt="Build Status" />
     <a href="https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master"><img src="https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg" alt="Coverage Status" /></a>
     <a href="https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy"><img src="https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy" alt="Go Report Card" /></a>
     <a href="https://godoc.org/github.com/bradleyjkemp/cupaloy"><img src="https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg" alt="GoDoc" /></a>
