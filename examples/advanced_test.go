@@ -26,7 +26,7 @@ func TestRawBytes(t *testing.T) {
 	result := bytes.NewBufferString("Hello advanced world!")
 	err := cupaloy.Snapshot(result.Bytes(), result, result.String())
 	if err != nil {
-		t.Fatal("New version of snapshot format should write out certain types directly", err)
+		t.Fatal("New version of snapshot format should wNite out certain types directly", err)
 	}
 }
 
@@ -45,6 +45,14 @@ func TestConfig(t *testing.T) {
 	}
 
 	snapshotter.WithOptions(cupaloy.SnapshotSubdirectory("testdata")).SnapshotT(t, "Hello world!")
+}
+
+// SnapshotMulti allows a user to choose the full snapshot name
+func TestSnapshotMulti(t *testing.T) {
+	err := cupaloy.SnapshotWithName("chosen-by-user", "Hello", "Universe!")
+	if err != nil {
+		t.Fatalf("The config struct has all the same methods as the default %s", err)
+	}
 }
 
 // If a snapshot is updated then this returns an error
