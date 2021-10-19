@@ -90,7 +90,7 @@ func (c *Config) readSnapshot(snapshotName string) (string, error) {
 		return "", err
 	}
 
-	return string(buf), nil
+	return replaceLineSeparator(string(buf)), nil
 }
 
 func (c *Config) updateSnapshot(snapshotName string, prevSnapshot string, snapshot string) error {
