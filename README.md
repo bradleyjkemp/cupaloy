@@ -69,3 +69,7 @@ func TestSubdirectory(t *testing.T) {
 }
 ```
 For further usage examples see basic_test.go and advanced_test.go in the examples/ directory which are both kept up to date and run on CI.
+
+## Debugging
+### Windows
+It is important to note that git on Windows might be configured in a way that `\n` is replaced by `\r\n` during checkout (it is the case on GitHub actions). In such a case, the snapshot appears to be the same, but the test fails. Please ensure that git is configured correctly everywhere. There are multiple ways to do it, please check https://github.com/actions/checkout/issues/135 and https://github.com/bradleyjkemp/cupaloy/pull/73 for more details.
