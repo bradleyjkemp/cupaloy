@@ -26,7 +26,7 @@ func TestRawBytes(t *testing.T) {
 	result := bytes.NewBufferString("Hello advanced world!")
 	err := cupaloy.Snapshot(result.Bytes(), result, result.String())
 	if err != nil {
-		t.Fatal("New version of snapshot format should wNite out certain types directly", err)
+		t.Fatal("New version of snapshot format should write out certain types directly", err)
 	}
 }
 
