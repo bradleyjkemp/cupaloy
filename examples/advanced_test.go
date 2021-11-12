@@ -47,6 +47,14 @@ func TestConfig(t *testing.T) {
 	snapshotter.WithOptions(cupaloy.SnapshotSubdirectory("testdata")).SnapshotT(t, "Hello world!")
 }
 
+// SnapshotMulti allows a user to choose the full snapshot name
+func TestSnapshotWithName(t *testing.T) {
+	err := cupaloy.SnapshotWithName("chosen-by-user", "Hello", "Universe!")
+	if err != nil {
+		t.Fatalf("The config struct has all the same methods as the default %s", err)
+	}
+}
+
 // If a snapshot is updated then this returns an error
 // This is to prevent you accidentally updating your snapshots in CI
 func TestUpdate(t *testing.T) {

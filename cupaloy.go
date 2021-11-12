@@ -31,6 +31,11 @@ func SnapshotT(t TestingT, i ...interface{}) {
 	Global.SnapshotT(t, i...)
 }
 
+// SnapshotWithName calls Snapshotter.SnapshotWithName with the global config.
+func SnapshotWithName(snapshotName string, i ...interface{}) error {
+	return Global.SnapshotWithName(snapshotName, i...)
+}
+
 // Snapshot compares the given variable to its previous value stored on the filesystem.
 // An error containing a diff is returned if the snapshots do not match, or if a new
 // snapshot was created.
@@ -51,6 +56,12 @@ func (c *Config) Snapshot(i ...interface{}) error {
 // appended to the function name to form the snapshot name.
 func (c *Config) SnapshotMulti(snapshotID string, i ...interface{}) error {
 	snapshotName := fmt.Sprintf("%s-%s", getNameOfCaller(), snapshotID)
+	return c.snapshot(snapshotName, i...)
+}
+
+// SnapshotWithName is similar to SnapshotMulti without appending the function name.
+// It is useful when you need full control of the snapshot filename.
+func (c *Config) SnapshotWithName(snapshotName string, i ...interface{}) error {
 	return c.snapshot(snapshotName, i...)
 }
 
