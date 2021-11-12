@@ -48,7 +48,7 @@ func TestConfig(t *testing.T) {
 }
 
 // SnapshotMulti allows a user to choose the full snapshot name
-func TestSnapshotMulti(t *testing.T) {
+func TestSnapshotWithName(t *testing.T) {
 	err := cupaloy.SnapshotWithName("chosen-by-user", "Hello", "Universe!")
 	if err != nil {
 		t.Fatalf("The config struct has all the same methods as the default %s", err)
