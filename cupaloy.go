@@ -132,6 +132,11 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 		return c.updateSnapshot(snapshotName, prevSnapshot, snapshot)
 	}
 
+	if c.shouldWriteFailedSnapshot {
+		// writes the current (not matching) snapshot to a file with an extra suffix: .failed
+		return c.writeFailedSnapshot(snapshotName, prevSnapshot, snapshot)
+	}
+
 	return internal.ErrSnapshotMismatch{
 		Diff: diffSnapshots(prevSnapshot, snapshot),
 	}

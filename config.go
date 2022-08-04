@@ -85,15 +85,24 @@ func UseStringerMethods(useStringerMethods bool) Configurator {
 	}
 }
 
+// WriteFailedSnapshot writes the failed snapshot to disk with an extra suffix .failed
+// Default: false
+func WriteFailedSnapshot(shouldWriteFailedSnapshot bool) Configurator {
+	return func(c *Config) {
+		c.shouldWriteFailedSnapshot = shouldWriteFailedSnapshot
+	}
+}
+
 // Config provides the same snapshotting functions with additional configuration capabilities.
 type Config struct {
-	shouldUpdate           func() bool
-	subDirName             string
-	failOnUpdate           bool
-	createNewAutomatically bool
-	fatalOnMismatch        bool
-	snapshotFileExtension  string
-	useStringerMethods     bool
+	shouldUpdate              func() bool
+	subDirName                string
+	failOnUpdate              bool
+	createNewAutomatically    bool
+	fatalOnMismatch           bool
+	snapshotFileExtension     string
+	useStringerMethods        bool
+	shouldWriteFailedSnapshot bool
 }
 
 // NewDefaultConfig returns a new Config instance initialised with the same options as
@@ -107,6 +116,7 @@ func NewDefaultConfig() *Config {
 		FatalOnMismatch(false),
 		SnapshotFileExtension(""),
 		UseStringerMethods(true),
+		WriteFailedSnapshot(false),
 	)
 }
 
@@ -115,12 +125,13 @@ var Global = NewDefaultConfig()
 
 func (c *Config) clone() *Config {
 	return &Config{
-		shouldUpdate:           c.shouldUpdate,
-		subDirName:             c.subDirName,
-		failOnUpdate:           c.failOnUpdate,
-		createNewAutomatically: c.createNewAutomatically,
-		fatalOnMismatch:        c.fatalOnMismatch,
-		snapshotFileExtension:  c.snapshotFileExtension,
-		useStringerMethods:     c.useStringerMethods,
+		shouldUpdate:              c.shouldUpdate,
+		subDirName:                c.subDirName,
+		failOnUpdate:              c.failOnUpdate,
+		createNewAutomatically:    c.createNewAutomatically,
+		fatalOnMismatch:           c.fatalOnMismatch,
+		snapshotFileExtension:     c.snapshotFileExtension,
+		useStringerMethods:        c.useStringerMethods,
+		shouldWriteFailedSnapshot: c.shouldWriteFailedSnapshot,
 	}
 }
