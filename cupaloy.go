@@ -133,7 +133,7 @@ func (c *Config) snapshot(snapshotName string, i ...interface{}) error {
 	}
 
 	if c.shouldWriteFailedSnapshot {
-		// writes the current (not matching) to a file with an extra suffix: .failed
+		// writes the current (not matching) snapshot to a file with an extra suffix: .failed
 		return c.writeFailedSnapshot(snapshotName, prevSnapshot, snapshot)
 	}
 
