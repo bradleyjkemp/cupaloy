@@ -2,7 +2,9 @@ package examples_test
 
 import (
 	"bytes"
+	"io/fs"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 
@@ -235,4 +237,30 @@ func TestUseStringerMethods(t *testing.T) {
 	t.Run("disabled", func(t *testing.T) {
 		cupaloy.New(cupaloy.UseStringerMethods(false)).SnapshotT(t, s)
 	})
+}
+
+func TestWriteFailedSnapshot(t *testing.T) {
+	dir := "./.snapshots"
+	snapShotName := t.Name()
+	failedSnapshotName := snapShotName + ".failed"
+	fileStat := func() error {
+		_, err := fs.Stat(os.DirFS(dir), failedSnapshotName)
+		return err
+	}
+	err := fileStat()
+	if err == nil {
+		t.Fatalf("File %s should not be there yet.", failedSnapshotName)
+	}
+	defer func() {
+		_ = os.Remove(dir + "/" + failedSnapshotName)
+	}()
+	snapshotter := cupaloy.New(cupaloy.WriteFailedSnapshot(true))
+	err = snapshotter.SnapshotWithName(snapShotName, "Hello World! <changed>")
+	if err == nil {
+		t.Fatal("It should return an error as the snapshots are not equal.")
+	}
+	err = fileStat()
+	if err != nil {
+		t.Fatalf("Could not find %s", failedSnapshotName)
+	}
 }

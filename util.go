@@ -129,6 +129,21 @@ func (c *Config) updateSnapshot(snapshotName string, prevSnapshot string, snapsh
 	}
 }
 
+func (c *Config) writeFailedSnapshot(snapshotName string, prevSnapshot string, snapshot string) error {
+	snapshotFile := c.snapshotFilePath(snapshotName)
+	_, err := os.Stat(snapshotFile)
+	if err != nil {
+		return errors.New("could not find snapshot file")
+	}
+	err = ioutil.WriteFile(snapshotFile+".failed", []byte(snapshot), os.FileMode(0644))
+	if err != nil {
+		return err
+	}
+	return internal.ErrSnapshotMismatch{
+		Diff: diffSnapshots(prevSnapshot, snapshot),
+	}
+}
+
 func diffSnapshots(previous, current string) string {
 	diff, _ := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
 		A:        difflib.SplitLines(previous),
