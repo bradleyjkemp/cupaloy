@@ -76,8 +76,8 @@ func SnapshotFileExtension(snapshotFileExtension string) Configurator {
 	}
 }
 
-// DiffSnapshots allows you to change the differ used for comparing the
-// previous snapshot to the current.
+// DiffSnapshots allows you to change the diffing function used to display the
+// difference between the previous snapshot and the current.
 // Default: Internal differ using difflib
 func DiffSnapshots(differ func(previous, current string) string) Configurator {
 	return func(c *Config) {
