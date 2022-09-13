@@ -15,14 +15,6 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 )
 
-var spewConfig = spew.ConfigState{
-	Indent:                  "  ",
-	SortKeys:                true, // maps should be spewed in a deterministic order
-	DisablePointerAddresses: true, // don't spew the addresses of pointers
-	DisableCapacities:       true, // don't spew capacities of collections
-	SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
-}
-
 //go:generate $GOPATH/bin/mockery -output=examples -outpkg=examples_test -testonly -name=TestingT
 
 // TestingT is a subset of the interface testing.TB allowing it to be mocked in tests.
@@ -47,17 +39,28 @@ func envVariableSet(envVariable string) bool {
 	return varSet
 }
 
+func (c *Config) getSpewConfig() *spew.ConfigState {
+	return &spew.ConfigState{
+		Indent:                  "  ",
+		SortKeys:                true, // maps should be spewed in a deterministic order
+		DisablePointerAddresses: true, // don't spew the addresses of pointers
+		DisableCapacities:       true, // don't spew capacities of collections
+		SpewKeys:                true, // if unable to sort map keys then spew keys to strings and sort those
+		DisableMethods:          !c.useStringerMethods,
+	}
+}
+
 func (c *Config) snapshotFilePath(testName string) string {
 	return filepath.Join(c.subDirName, testName+c.snapshotFileExtension)
 }
 
 // Legacy snapshot format where all items were spewed
-func takeV1Snapshot(i ...interface{}) string {
-	return spewConfig.Sdump(i...)
+func (c *Config) takeV1Snapshot(i ...interface{}) string {
+	return c.getSpewConfig().Sdump(i...)
 }
 
 // New snapshot format where some types are written out raw to the file
-func takeSnapshot(i ...interface{}) string {
+func (c *Config) takeSnapshot(i ...interface{}) string {
 	snapshot := &bytes.Buffer{}
 	for _, v := range i {
 		switch vt := v.(type) {
@@ -68,7 +71,7 @@ func takeSnapshot(i ...interface{}) string {
 			snapshot.Write(vt)
 			snapshot.WriteString("\n")
 		default:
-			spewConfig.Fdump(snapshot, v)
+			c.getSpewConfig().Fdump(snapshot, v)
 		}
 	}
 

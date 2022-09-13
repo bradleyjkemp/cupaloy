@@ -1,7 +1,7 @@
 <h1 align="center">
     <img src="https://github.com/bradleyjkemp/cupaloy/blob/master/mascot.png" alt="Mascot" width="200">
     <br>
-    <a href="https://travis-ci.org/bradleyjkemp/cupaloy"><img src="https://travis-ci.org/bradleyjkemp/cupaloy.svg?branch=master" alt="Build Status" /></a>
+    <img src="https://github.com/bradleyjkemp/cupaloy/workflows/Go/badge.svg" alt="Build Status" />
     <a href="https://coveralls.io/github/bradleyjkemp/cupaloy?branch=master"><img src="https://coveralls.io/repos/github/bradleyjkemp/cupaloy/badge.svg" alt="Coverage Status" /></a>
     <a href="https://goreportcard.com/report/github.com/bradleyjkemp/cupaloy"><img src="https://goreportcard.com/badge/github.com/bradleyjkemp/cupaloy" alt="Go Report Card" /></a>
     <a href="https://godoc.org/github.com/bradleyjkemp/cupaloy"><img src="https://godoc.org/github.com/bradleyjkemp/cupaloy?status.svg" alt="GoDoc" /></a>
@@ -69,3 +69,7 @@ func TestSubdirectory(t *testing.T) {
 }
 ```
 For further usage examples see basic_test.go and advanced_test.go in the examples/ directory which are both kept up to date and run on CI.
+
+## Debugging
+### Windows
+It is important to note that git on Windows might be configured in a way that `\n` is replaced by `\r\n` during checkout (it is the case on GitHub actions). In such a case, the snapshot appears to be the same, but the test fails. Please ensure that git is configured correctly everywhere. There are multiple ways to do it, please check https://github.com/actions/checkout/issues/135 and https://github.com/bradleyjkemp/cupaloy/pull/73 for more details.

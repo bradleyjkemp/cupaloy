@@ -82,6 +82,15 @@ func SnapshotFileExtension(snapshotFileExtension string) Configurator {
 func DiffSnapshots(differ func(previous, current string) string) Configurator {
 	return func(c *Config) {
 		c.diffSnapshots = differ
+  }
+}
+
+// UseStringerMethods invoke String() or Error() methods when available rather than dumping the object.
+// This should probably be disabled by default but is not for backwards compatibility reasons.
+// Default: true
+func UseStringerMethods(useStringerMethods bool) Configurator {
+	return func(c *Config) {
+		c.useStringerMethods = useStringerMethods
 	}
 }
 
@@ -94,6 +103,7 @@ type Config struct {
 	fatalOnMismatch        bool
 	snapshotFileExtension  string
 	diffSnapshots          func(previous, current string) string
+	useStringerMethods     bool
 }
 
 // NewDefaultConfig returns a new Config instance initialised with the same options as
@@ -107,6 +117,7 @@ func NewDefaultConfig() *Config {
 		FatalOnMismatch(false),
 		SnapshotFileExtension(""),
 		DiffSnapshots(diffSnapshots),
+		UseStringerMethods(true),
 	)
 }
 
@@ -122,5 +133,6 @@ func (c *Config) clone() *Config {
 		fatalOnMismatch:        c.fatalOnMismatch,
 		snapshotFileExtension:  c.snapshotFileExtension,
 		diffSnapshots:          c.diffSnapshots,
+		useStringerMethods:     c.useStringerMethods,
 	}
 }
