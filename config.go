@@ -76,6 +76,15 @@ func SnapshotFileExtension(snapshotFileExtension string) Configurator {
 	}
 }
 
+// DiffSnapshots allows you to change the diffing function used to display the
+// difference between the previous snapshot and the current.
+// Default: Internal differ using difflib
+func DiffSnapshots(differ func(previous, current string) string) Configurator {
+	return func(c *Config) {
+		c.diffSnapshots = differ
+  }
+}
+
 // UseStringerMethods invoke String() or Error() methods when available rather than dumping the object.
 // This should probably be disabled by default but is not for backwards compatibility reasons.
 // Default: true
@@ -93,6 +102,7 @@ type Config struct {
 	createNewAutomatically bool
 	fatalOnMismatch        bool
 	snapshotFileExtension  string
+	diffSnapshots          func(previous, current string) string
 	useStringerMethods     bool
 }
 
@@ -106,6 +116,7 @@ func NewDefaultConfig() *Config {
 		CreateNewAutomatically(true),
 		FatalOnMismatch(false),
 		SnapshotFileExtension(""),
+		DiffSnapshots(diffSnapshots),
 		UseStringerMethods(true),
 	)
 }
@@ -121,6 +132,7 @@ func (c *Config) clone() *Config {
 		createNewAutomatically: c.createNewAutomatically,
 		fatalOnMismatch:        c.fatalOnMismatch,
 		snapshotFileExtension:  c.snapshotFileExtension,
+		diffSnapshots:          c.diffSnapshots,
 		useStringerMethods:     c.useStringerMethods,
 	}
 }
